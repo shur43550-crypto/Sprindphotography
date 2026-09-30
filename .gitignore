@@ -1,0 +1,11 @@
+﻿# 构建过程中的临时文件
+*.tmp
+*.log
+_check.mjs
+_c.mjs
+_tmp_full/
+
+# 系统文件
+Thumbs.db
+desktop.ini
+.DS_Store
