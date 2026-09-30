@@ -31,15 +31,15 @@ const shotText = (srcFile) => {
 const PLATE_TEXT = {
   '新疆': ['高原湖泊、雪山与草场，红路穿过金色的河谷', 'Alpine lakes, snow peaks and pasture, a red road cutting through a golden valley.'],
   '川西': ['川西高原的草甸与雪山，牦牛散落在坡上', 'Highland meadows and snow peaks of western Sichuan, yaks scattered across the slopes.'],
+  '云南': ['云南的高原湖泊与云，光线在午后格外通透', 'Plateau lakes and clouds in Yunnan, the light especially clear in the afternoon.'],
   '九寨沟': ['九寨沟的水：钙华、冰凌与层层递进的蓝绿', 'The water of Jiuzhaigou: travertine terraces, icicles, and blue-green deepening layer by layer.'],
   '稻城亚丁': ['稻城亚丁的雪峰、寺院与经幡，云雾在半山缠绕', 'Snow peaks, monasteries and prayer flags at Daocheng Yading, clouds caught halfway up the ridges.'],
   '四姑娘山': ['四姑娘山的针叶林与裸岩，山脊切开云层', 'Conifer forest and bare rock at Mount Siguniang, ridgelines cutting into the clouds.'],
   '七彩丹霞': ['张掖七彩丹霞与沙漠，岩层在雨后颜色最饱和', 'Zhangye Danxia and the desert beyond, strata at their most saturated after rain.'],
   '大连': ['大连的海岸与街道，黄昏把楼群染成暖色', 'The coast and streets of Dalian, dusk warming the facades.'],
-  '花果山': ['云台山的雾凇与雪松，冬天把针叶压成白色', 'Rime and snow-laden pines on Mount Huaguo, winter turning the needles white.'],
-  // 花果山、连岛已按要求合并进「连云港」，所以这个键才是江苏那几版实际命中的
   '连云港': ['云台山的雾凇与海边的礁石，冬日的连云港', 'Rime on Mount Huaguo and rocky shores by the sea, Lianyungang in winter.'],
-  '青岛': ['青岛的红瓦与海岸线，海雾从远处慢慢推上来', 'Qingdao\u2019s red roofs and coastline, sea fog rolling in from the distance.'],
+  '苏州': ['苏州的白墙与花木，春日的影子落在墙上', 'White walls and flowering branches in Suzhou, spring shadows falling across the plaster.'],
+  '青岛': ['青岛的红瓦与海岸线，海雾从远处慢慢推上来', 'Qingdao’s red roofs and coastline, sea fog rolling in from the distance.'],
   '哈尔滨': ['圣索菲亚教堂的穹顶，金饰在昏暗里仍然发亮', 'The dome of Saint Sophia in Harbin, gilding still catching light in the dim interior.'],
   '青海': ['青海湖的青与蓝，公路沿着湖岸一直延伸', 'The greens and blues of Qinghai Lake, the road running along the shore.'],
   '武汉': ['武汉的城市天际线，在黄昏里退成剪影', 'The Wuhan skyline receding into silhouette at dusk.'],

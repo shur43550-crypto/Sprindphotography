@@ -92,7 +92,9 @@ async function annotate(imgPath, ext) {
     headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
     body: JSON.stringify({
       model: 'deepseek-flash',
-      max_tokens: 900,
+      // 640 → 1600：这个模型会先输出 thinking 块，预算太小会让 text 块为空
+      // （表现为 stop_reason=max_tokens、内容是空字符串）
+      max_tokens: 1600,
       messages: [{
         role: 'user',
         content: [
@@ -107,8 +109,12 @@ async function annotate(imgPath, ext) {
   const j = await res.json();
   const text = (j.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('\n').trim();
   const p = text ? parseReply(text) : null;
-  if (!p || (!p.zh && !p.en)) {
-    const why = text ? `无法解析: ${text.slice(0, 80)}` : `空响应(stop=${j.stop_reason ?? '?'})`;
+  // 中文和英文都必须有：曾出现过"中文有、英文空"的半截结果（川西 (4)），
+  // 那种也算失败，留下会重试。
+  if (!p || !p.zh || !p.en) {
+    const why = text
+      ? (!p ? `无法解析: ${text.slice(0, 80)}` : `字段不完整 zh=${!!p.zh} en=${!!p.en}`)
+      : `空响应(stop=${j.stop_reason ?? '?'})`;
     throw new Error(why);
   }
   return {

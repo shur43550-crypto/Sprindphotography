@@ -15,9 +15,10 @@ const OUT = process.argv[3] || 'C:/Users/Sprind/Documents/deepseek-harness/defau
 const REGIONS = [
   { id: 'xinjiang',     name: '新疆',   en: 'Xinjiang',      places: ['喀纳斯', '赛里木湖', '新疆'], aliases: ['喀纳斯', '新疆赛里木湖', '新疆'] },
   { id: 'chuanxi',      name: '川西',   en: 'West Sichuan',  places: ['川西', '九寨沟', '四姑娘山', '稻城亚丁'], aliases: ['川西', '九寨沟', '四姑娘山', '稻城亚丁'] },
+  { id: 'yunnan',       name: '云南',   en: 'Yunnan',        places: ['云南'], aliases: ['云南'] },
   { id: 'gansu',        name: '甘肃',   en: 'Gansu',         places: ['七彩丹霞', '中卫', '扎尕那'], aliases: ['七彩丹霞', '中卫', '扎尕那'] },
   { id: 'liaoning',     name: '辽宁',   en: 'Liaoning',      places: ['大连'], aliases: ['大连'] },
-  { id: 'jiangsu',      name: '江苏',   en: 'Jiangsu',       places: ['连云港', '连岛', '花果山'], aliases: ['连云港', '连岛', '花果山'] },
+  { id: 'jiangsu',      name: '江苏',   en: 'Jiangsu',       places: ['连云港', '连岛', '花果山', '苏州'], aliases: ['连云港', '连岛', '花果山', '苏州'] },
   { id: 'shandong',     name: '山东',   en: 'Shandong',      places: ['青岛'], aliases: ['青岛'] },
   { id: 'heilongjiang', name: '黑龙江', en: 'Heilongjiang',  places: ['哈尔滨'], aliases: ['哈尔滨', '哈尔滨圣索菲亚教堂'] },
   { id: 'qinghai',      name: '青海',   en: 'Qinghai',       places: ['青海'], aliases: ['青海', '青海湖'] },
