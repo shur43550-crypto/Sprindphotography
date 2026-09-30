@@ -1,0 +1,1073 @@
+{
+  "src": "C:\\Users\\Sprind\\Desktop\\网页",
+  "regions": [
+    {
+      "id": "xinjiang",
+      "name": "新疆",
+      "en": "Xinjiang",
+      "places": [
+        "喀纳斯",
+        "赛里木湖",
+        "新疆"
+      ],
+      "aliases": [
+        "喀纳斯",
+        "新疆赛里木湖",
+        "新疆"
+      ]
+    },
+    {
+      "id": "chuanxi",
+      "name": "川西",
+      "en": "West Sichuan",
+      "places": [
+        "川西",
+        "九寨沟",
+        "四姑娘山",
+        "稻城亚丁"
+      ],
+      "aliases": [
+        "川西",
+        "九寨沟",
+        "四姑娘山",
+        "稻城亚丁"
+      ]
+    },
+    {
+      "id": "gansu",
+      "name": "甘肃",
+      "en": "Gansu",
+      "places": [
+        "七彩丹霞",
+        "中卫",
+        "扎尕那"
+      ],
+      "aliases": [
+        "七彩丹霞",
+        "中卫",
+        "扎尕那"
+      ]
+    },
+    {
+      "id": "liaoning",
+      "name": "辽宁",
+      "en": "Liaoning",
+      "places": [
+        "大连"
+      ],
+      "aliases": [
+        "大连"
+      ]
+    },
+    {
+      "id": "jiangsu",
+      "name": "江苏",
+      "en": "Jiangsu",
+      "places": [
+        "连云港",
+        "连岛",
+        "花果山"
+      ],
+      "aliases": [
+        "连云港",
+        "连岛",
+        "花果山"
+      ]
+    },
+    {
+      "id": "shandong",
+      "name": "山东",
+      "en": "Shandong",
+      "places": [
+        "青岛"
+      ],
+      "aliases": [
+        "青岛"
+      ]
+    },
+    {
+      "id": "heilongjiang",
+      "name": "黑龙江",
+      "en": "Heilongjiang",
+      "places": [
+        "哈尔滨"
+      ],
+      "aliases": [
+        "哈尔滨",
+        "哈尔滨圣索菲亚教堂"
+      ]
+    },
+    {
+      "id": "qinghai",
+      "name": "青海",
+      "en": "Qinghai",
+      "places": [
+        "青海"
+      ],
+      "aliases": [
+        "青海",
+        "青海湖"
+      ]
+    },
+    {
+      "id": "hubei",
+      "name": "湖北",
+      "en": "Hubei",
+      "places": [
+        "武汉"
+      ],
+      "aliases": [
+        "武汉"
+      ]
+    },
+    {
+      "id": "zhejiang",
+      "name": "浙江",
+      "en": "Zhejiang",
+      "places": [
+        "杭州"
+      ],
+      "aliases": [
+        "杭州"
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "file": "川西 (1).jpg",
+      "place": "川西",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 2016,
+      "h": 3024,
+      "ratio": 0.6667,
+      "orient": "portrait",
+      "mb": 2.31
+    },
+    {
+      "file": "川西 (2).jpg",
+      "place": "川西",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 2.12
+    },
+    {
+      "file": "川西 (3).jpg",
+      "place": "川西",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 8.13
+    },
+    {
+      "file": "川西 (4).jpg",
+      "place": "川西",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 8.28
+    },
+    {
+      "file": "川西 (5).jpg",
+      "place": "川西",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 3.8
+    },
+    {
+      "file": "川西 (6).jpg",
+      "place": "川西",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 7.28
+    },
+    {
+      "file": "川西 (7).jpg",
+      "place": "川西",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 2.65
+    },
+    {
+      "file": "川西.jpg",
+      "place": "川西",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 1440,
+      "h": 1080,
+      "ratio": 1.3333,
+      "orient": "landscape",
+      "mb": 0.79
+    },
+    {
+      "file": "大连 (1).jpg",
+      "place": "大连",
+      "regionId": "liaoning",
+      "regionName": "辽宁",
+      "regionEn": "Liaoning",
+      "w": 4096,
+      "h": 3072,
+      "ratio": 1.3333,
+      "orient": "landscape",
+      "mb": 5.47
+    },
+    {
+      "file": "大连 (2).jpg",
+      "place": "大连",
+      "regionId": "liaoning",
+      "regionName": "辽宁",
+      "regionEn": "Liaoning",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 3.75
+    },
+    {
+      "file": "大连 (3).jpg",
+      "place": "大连",
+      "regionId": "liaoning",
+      "regionName": "辽宁",
+      "regionEn": "Liaoning",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 1.81
+    },
+    {
+      "file": "大连 (4).jpg",
+      "place": "大连",
+      "regionId": "liaoning",
+      "regionName": "辽宁",
+      "regionEn": "Liaoning",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 0.92
+    },
+    {
+      "file": "大连 (5).jpg",
+      "place": "大连",
+      "regionId": "liaoning",
+      "regionName": "辽宁",
+      "regionEn": "Liaoning",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 3.44
+    },
+    {
+      "file": "大连 (6).jpg",
+      "place": "大连",
+      "regionId": "liaoning",
+      "regionName": "辽宁",
+      "regionEn": "Liaoning",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 0.78
+    },
+    {
+      "file": "大连 (7).jpg",
+      "place": "大连",
+      "regionId": "liaoning",
+      "regionName": "辽宁",
+      "regionEn": "Liaoning",
+      "w": 2796,
+      "h": 1866,
+      "ratio": 1.4984,
+      "orient": "landscape",
+      "mb": 2.4
+    },
+    {
+      "file": "大连 (8).JPG",
+      "place": "大连",
+      "regionId": "liaoning",
+      "regionName": "辽宁",
+      "regionEn": "Liaoning",
+      "w": 2433,
+      "h": 3637,
+      "ratio": 0.669,
+      "orient": "portrait",
+      "mb": 5.58
+    },
+    {
+      "file": "大连 (9).JPG",
+      "place": "大连",
+      "regionId": "liaoning",
+      "regionName": "辽宁",
+      "regionEn": "Liaoning",
+      "w": 3637,
+      "h": 2433,
+      "ratio": 1.4949,
+      "orient": "landscape",
+      "mb": 7
+    },
+    {
+      "file": "大连.BMP",
+      "place": "大连",
+      "regionId": "liaoning",
+      "regionName": "辽宁",
+      "regionEn": "Liaoning",
+      "w": 3637,
+      "h": 2433,
+      "ratio": 1.4949,
+      "orient": "landscape",
+      "mb": 25.32
+    },
+    {
+      "file": "大连.jpg",
+      "place": "大连",
+      "regionId": "liaoning",
+      "regionName": "辽宁",
+      "regionEn": "Liaoning",
+      "w": 4096,
+      "h": 3072,
+      "ratio": 1.3333,
+      "orient": "landscape",
+      "mb": 5.37
+    },
+    {
+      "file": "稻城亚丁 (1).jpg",
+      "place": "稻城亚丁",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 1494,
+      "h": 997,
+      "ratio": 1.4985,
+      "orient": "landscape",
+      "mb": 0.53
+    },
+    {
+      "file": "稻城亚丁 (2).jpg",
+      "place": "稻城亚丁",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 1.94
+    },
+    {
+      "file": "稻城亚丁 (3).jpg",
+      "place": "稻城亚丁",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 1.53
+    },
+    {
+      "file": "稻城亚丁 (4).jpg",
+      "place": "稻城亚丁",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 1620,
+      "h": 1080,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 0.48
+    },
+    {
+      "file": "稻城亚丁.jpg",
+      "place": "稻城亚丁",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 2016,
+      "h": 3024,
+      "ratio": 0.6667,
+      "orient": "portrait",
+      "mb": 1.89
+    },
+    {
+      "file": "哈尔滨 (2).jpg",
+      "place": "哈尔滨",
+      "regionId": "heilongjiang",
+      "regionName": "黑龙江",
+      "regionEn": "Heilongjiang",
+      "w": 4019,
+      "h": 3014,
+      "ratio": 1.3334,
+      "orient": "landscape",
+      "mb": 6.61
+    },
+    {
+      "file": "哈尔滨.jpg",
+      "place": "哈尔滨",
+      "regionId": "heilongjiang",
+      "regionName": "黑龙江",
+      "regionEn": "Heilongjiang",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 6.5
+    },
+    {
+      "file": "哈尔滨圣索菲亚教堂.jpg",
+      "place": "哈尔滨",
+      "regionId": "heilongjiang",
+      "regionName": "黑龙江",
+      "regionEn": "Heilongjiang",
+      "w": 3844,
+      "h": 2560,
+      "ratio": 1.5016,
+      "orient": "landscape",
+      "mb": 6.41
+    },
+    {
+      "file": "杭州 (1).jpg",
+      "place": "杭州",
+      "regionId": "zhejiang",
+      "regionName": "浙江",
+      "regionEn": "Zhejiang",
+      "w": 1439,
+      "h": 958,
+      "ratio": 1.5021,
+      "orient": "landscape",
+      "mb": 0.17
+    },
+    {
+      "file": "杭州 (2).jpg",
+      "place": "杭州",
+      "regionId": "zhejiang",
+      "regionName": "浙江",
+      "regionEn": "Zhejiang",
+      "w": 1439,
+      "h": 958,
+      "ratio": 1.5021,
+      "orient": "landscape",
+      "mb": 0.2
+    },
+    {
+      "file": "花果山 (1).jpg",
+      "place": "连云港",
+      "regionId": "jiangsu",
+      "regionName": "江苏",
+      "regionEn": "Jiangsu",
+      "w": 2016,
+      "h": 3024,
+      "ratio": 0.6667,
+      "orient": "portrait",
+      "mb": 3.01
+    },
+    {
+      "file": "花果山 (2).jpg",
+      "place": "连云港",
+      "regionId": "jiangsu",
+      "regionName": "江苏",
+      "regionEn": "Jiangsu",
+      "w": 2016,
+      "h": 3024,
+      "ratio": 0.6667,
+      "orient": "portrait",
+      "mb": 3.37
+    },
+    {
+      "file": "花果山.jpg",
+      "place": "连云港",
+      "regionId": "jiangsu",
+      "regionName": "江苏",
+      "regionEn": "Jiangsu",
+      "w": 2016,
+      "h": 3024,
+      "ratio": 0.6667,
+      "orient": "portrait",
+      "mb": 1.91
+    },
+    {
+      "file": "九寨沟 (1).jpg",
+      "place": "九寨沟",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 2404,
+      "h": 1600,
+      "ratio": 1.5025,
+      "orient": "landscape",
+      "mb": 0.48
+    },
+    {
+      "file": "九寨沟 (2).jpg",
+      "place": "九寨沟",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 4096,
+      "h": 2726,
+      "ratio": 1.5026,
+      "orient": "landscape",
+      "mb": 3
+    },
+    {
+      "file": "九寨沟 (3).jpg",
+      "place": "九寨沟",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 2.01
+    },
+    {
+      "file": "九寨沟 (4).jpg",
+      "place": "九寨沟",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 2016,
+      "h": 3024,
+      "ratio": 0.6667,
+      "orient": "portrait",
+      "mb": 1.89
+    },
+    {
+      "file": "九寨沟 (5).jpg",
+      "place": "九寨沟",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 2016,
+      "h": 3024,
+      "ratio": 0.6667,
+      "orient": "portrait",
+      "mb": 1.9
+    },
+    {
+      "file": "九寨沟 (6).jpg",
+      "place": "九寨沟",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 2.53
+    },
+    {
+      "file": "九寨沟 (7).jpg",
+      "place": "九寨沟",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 2.1
+    },
+    {
+      "file": "九寨沟.jpg",
+      "place": "九寨沟",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 14.11
+    },
+    {
+      "file": "喀纳斯 (1).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 3.08
+    },
+    {
+      "file": "喀纳斯 (2).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 1.42
+    },
+    {
+      "file": "连岛.jpg",
+      "place": "连云港",
+      "regionId": "jiangsu",
+      "regionName": "江苏",
+      "regionEn": "Jiangsu",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 5.75
+    },
+    {
+      "file": "连云港.jpg",
+      "place": "连云港",
+      "regionId": "jiangsu",
+      "regionName": "江苏",
+      "regionEn": "Jiangsu",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 5.29
+    },
+    {
+      "file": "七彩丹霞.jpg",
+      "place": "七彩丹霞",
+      "regionId": "gansu",
+      "regionName": "甘肃",
+      "regionEn": "Gansu",
+      "w": 3072,
+      "h": 4536,
+      "ratio": 0.6772,
+      "orient": "portrait",
+      "mb": 6.72
+    },
+    {
+      "file": "青岛 (1).jpg",
+      "place": "青岛",
+      "regionId": "shandong",
+      "regionName": "山东",
+      "regionEn": "Shandong",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 1.72
+    },
+    {
+      "file": "青岛 (2).jpg",
+      "place": "青岛",
+      "regionId": "shandong",
+      "regionName": "山东",
+      "regionEn": "Shandong",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 7.45
+    },
+    {
+      "file": "青岛 (3).jpg",
+      "place": "青岛",
+      "regionId": "shandong",
+      "regionName": "山东",
+      "regionEn": "Shandong",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 9.14
+    },
+    {
+      "file": "青岛 (4).jpg",
+      "place": "青岛",
+      "regionId": "shandong",
+      "regionName": "山东",
+      "regionEn": "Shandong",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 5.78
+    },
+    {
+      "file": "青岛 (5).jpg",
+      "place": "青岛",
+      "regionId": "shandong",
+      "regionName": "山东",
+      "regionEn": "Shandong",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 7.51
+    },
+    {
+      "file": "青岛 (6).jpg",
+      "place": "青岛",
+      "regionId": "shandong",
+      "regionName": "山东",
+      "regionEn": "Shandong",
+      "w": 4024,
+      "h": 6048,
+      "ratio": 0.6653,
+      "orient": "portrait",
+      "mb": 11.15
+    },
+    {
+      "file": "青岛.jpg",
+      "place": "青岛",
+      "regionId": "shandong",
+      "regionName": "山东",
+      "regionEn": "Shandong",
+      "w": 4096,
+      "h": 3072,
+      "ratio": 1.3333,
+      "orient": "landscape",
+      "mb": 3.73
+    },
+    {
+      "file": "青海.jpg",
+      "place": "青海",
+      "regionId": "qinghai",
+      "regionName": "青海",
+      "regionEn": "Qinghai",
+      "w": 1440,
+      "h": 1080,
+      "ratio": 1.3333,
+      "orient": "landscape",
+      "mb": 0.22
+    },
+    {
+      "file": "青海湖 (1).jpg",
+      "place": "青海",
+      "regionId": "qinghai",
+      "regionName": "青海",
+      "regionEn": "Qinghai",
+      "w": 1440,
+      "h": 1080,
+      "ratio": 1.3333,
+      "orient": "landscape",
+      "mb": 0.23
+    },
+    {
+      "file": "青海湖 (2).jpg",
+      "place": "青海",
+      "regionId": "qinghai",
+      "regionName": "青海",
+      "regionEn": "Qinghai",
+      "w": 4096,
+      "h": 3072,
+      "ratio": 1.3333,
+      "orient": "landscape",
+      "mb": 6.69
+    },
+    {
+      "file": "四姑娘山 (1).jpg",
+      "place": "四姑娘山",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 10.28
+    },
+    {
+      "file": "四姑娘山 (2).jpg",
+      "place": "四姑娘山",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 6.99
+    },
+    {
+      "file": "四姑娘山.jpg",
+      "place": "四姑娘山",
+      "regionId": "chuanxi",
+      "regionName": "川西",
+      "regionEn": "West Sichuan",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 7.01
+    },
+    {
+      "file": "武汉.jpg",
+      "place": "武汉",
+      "regionId": "hubei",
+      "regionName": "湖北",
+      "regionEn": "Hubei",
+      "w": 6048,
+      "h": 4024,
+      "ratio": 1.503,
+      "orient": "landscape",
+      "mb": 6.5
+    },
+    {
+      "file": "新疆 (1).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 8192,
+      "h": 6144,
+      "ratio": 1.3333,
+      "orient": "landscape",
+      "mb": 6.38
+    },
+    {
+      "file": "新疆 (1).png",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 6.72
+    },
+    {
+      "file": "新疆 (2).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 4000,
+      "h": 2250,
+      "ratio": 1.7778,
+      "orient": "landscape",
+      "mb": 4.93
+    },
+    {
+      "file": "新疆 (3).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 1846,
+      "h": 1840,
+      "ratio": 1.0033,
+      "orient": "square",
+      "mb": 2
+    },
+    {
+      "file": "新疆 (4).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 2.54
+    },
+    {
+      "file": "新疆 (5).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 1.76
+    },
+    {
+      "file": "新疆 (6).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 4000,
+      "h": 2250,
+      "ratio": 1.7778,
+      "orient": "landscape",
+      "mb": 4.96
+    },
+    {
+      "file": "新疆.jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 2.81
+    },
+    {
+      "file": "新疆赛里木湖 (1).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 1968,
+      "h": 1312,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 0.82
+    },
+    {
+      "file": "新疆赛里木湖 (2).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 3072,
+      "h": 3071,
+      "ratio": 1.0003,
+      "orient": "square",
+      "mb": 1.63
+    },
+    {
+      "file": "新疆赛里木湖 (3).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 1.81
+    },
+    {
+      "file": "新疆赛里木湖 (4).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 4000,
+      "h": 2250,
+      "ratio": 1.7778,
+      "orient": "landscape",
+      "mb": 3.46
+    },
+    {
+      "file": "新疆赛里木湖 (5).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 4000,
+      "h": 2250,
+      "ratio": 1.7778,
+      "orient": "landscape",
+      "mb": 2.57
+    },
+    {
+      "file": "新疆赛里木湖 (6).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 4000,
+      "h": 2250,
+      "ratio": 1.7778,
+      "orient": "landscape",
+      "mb": 3.53
+    },
+    {
+      "file": "新疆赛里木湖 (7).jpg",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 4000,
+      "h": 2250,
+      "ratio": 1.7778,
+      "orient": "landscape",
+      "mb": 5.7
+    },
+    {
+      "file": "新疆赛里木湖.png",
+      "place": "新疆",
+      "regionId": "xinjiang",
+      "regionName": "新疆",
+      "regionEn": "Xinjiang",
+      "w": 3024,
+      "h": 2016,
+      "ratio": 1.5,
+      "orient": "landscape",
+      "mb": 6.03
+    },
+    {
+      "file": "扎尕那.jpg",
+      "place": "扎尕那",
+      "regionId": "gansu",
+      "regionName": "甘肃",
+      "regionEn": "Gansu",
+      "w": 5029,
+      "h": 4023,
+      "ratio": 1.2501,
+      "orient": "landscape",
+      "mb": 5.57
+    },
+    {
+      "file": "中卫 (1).jpg",
+      "place": "中卫",
+      "regionId": "gansu",
+      "regionName": "甘肃",
+      "regionEn": "Gansu",
+      "w": 2404,
+      "h": 1599,
+      "ratio": 1.5034,
+      "orient": "landscape",
+      "mb": 0.37
+    },
+    {
+      "file": "中卫 (2).jpg",
+      "place": "中卫",
+      "regionId": "gansu",
+      "regionName": "甘肃",
+      "regionEn": "Gansu",
+      "w": 4096,
+      "h": 2728,
+      "ratio": 1.5015,
+      "orient": "landscape",
+      "mb": 0.89
+    }
+  ]
+}

@@ -4,26 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sprind — 摄影作品</title>
-<meta name="description" content="Sprind 的摄影作品集：城市、海边与旅途中的片段。">
+<meta name="description" content="Sprind 的旅行摄影作品集，按地点分版编排：新疆、川西、甘肃、辽宁、江苏、山东、黑龙江、青海、湖北、浙江。">
 <style>
 /* ============================================================
-   设计取向
-   · 排布：瀑布流 masonry —— 横竖交错、随机错位，刻意保留不规则感
-     （不是等高行那种规整网格；竖图自然占窄列、横图占宽列）
-   · 配色三档：纸白 / 墨黑 / 一层灰 —— 颜色交给照片，界面不抢戏
-   · 动效四件事：首图缓慢推移 / 滚动逐块揭示 / 悬停轻微提亮 / 灯箱淡入
+   版面式排版
+   · 一版 3~5 张，版与版之间留出大片空白
+   · 版内大小交错（每张宽度不同 + 左右错位）
+   · 说明是「整版级别」的一条中英双语文字，不逐张注释
    ============================================================ */
 :root{
-  --paper:#faf9f7; --ink:#131313; --ink-2:#6a6a6a;
-  --line:rgba(19,19,19,.10);
+  --paper:#f7f6f3; --ink:#141414; --ink-2:#8a8a86; --ink-3:#b8b8b4;
+  --line:rgba(20,20,20,.12);
   --ease:cubic-bezier(.22,.61,.36,1);
   --ease-out:cubic-bezier(.16,1,.3,1);
-  --pad:clamp(16px,4.2vw,72px);
-  --gap:clamp(8px,1.1vw,16px);
-  --maxw:1680px;
+  --pad:clamp(20px,7vw,150px);
+  /* 版面之间的留白：整个页面的呼吸感主要靠它 */
+  --plate-gap:clamp(80px,20vh,240px);
 }
 @media (prefers-color-scheme:dark){
-  :root{ --paper:#0e0e0f; --ink:#f2f1ef; --ink-2:#9c9c9c; --line:rgba(242,241,239,.14); }
+  :root{ --paper:#0d0d0e; --ink:#f0efec; --ink-2:#8e8e8a; --ink-3:#57575a; --line:rgba(240,239,236,.16); }
 }
 *,*::before,*::after{ box-sizing:border-box; }
 html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
@@ -33,547 +32,426 @@ html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
 }
 body{
   margin:0; background:var(--paper); color:var(--ink);
-  font-family:"Inter","Helvetica Neue",-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-  font-weight:400; line-height:1.65; -webkit-font-smoothing:antialiased;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  font-weight:350; line-height:1.75; -webkit-font-smoothing:antialiased;
 }
 img{ display:block; max-width:100%; }
 button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; }
 a{ color:inherit; text-decoration:none; }
-
-/* ── 背景氛围层：两团极淡的模糊光斑，制造"背景是虚的"的空间感 ── */
-.bg-blur{
-  position:fixed; inset:-18vmax; z-index:-1; pointer-events:none;
-  filter:blur(96px) saturate(122%); opacity:.5;
-  background:
-    radial-gradient(46vmax 46vmax at 14% 16%, #9fc4e8 0%, transparent 62%),
-    radial-gradient(42vmax 42vmax at 86% 72%, #f0d3b4 0%, transparent 64%),
-    radial-gradient(38vmax 38vmax at 62% 32%, #cfd8e6 0%, transparent 66%);
-  animation:bgdrift 34s ease-in-out infinite alternate;
-}
-@keyframes bgdrift{
-  from{ transform:translate3d(0,0,0) scale(1); }
-  to{ transform:translate3d(-2.2%,1.6%,0) scale(1.06); }
-}
-@media (prefers-color-scheme:dark){
-  .bg-blur{ opacity:.34;
-    background:
-      radial-gradient(46vmax 46vmax at 14% 16%, #23405e 0%, transparent 62%),
-      radial-gradient(42vmax 42vmax at 86% 72%, #4a3524 0%, transparent 64%),
-      radial-gradient(38vmax 38vmax at 62% 32%, #2b3444 0%, transparent 66%);
-  }
-}
-
-/* ── 精选区：单张大幅展示 + 背景模糊衬底 ── */
-.featured-list{ margin-top:clamp(10px,2vw,26px); }
-.feat{
-  position:relative; display:grid; place-items:center;
-  min-height:min(88svh,960px); padding:clamp(26px,7vh,90px) 0;
-  isolation:isolate;
-}
-@media (max-width:700px){ .feat{ min-height:auto; padding:clamp(18px,4vh,42px) 0; } }
-
-/* 背景模糊衬底：同一张图放大 + 大半径模糊 + 压暗，随揭示一起展开，
-   像"从虚到实"浮出来，同时补出黑边环境色。 */
-.feat-backdrop{
-  position:absolute; inset:0; z-index:0; overflow:hidden;
-  clip-path:inset(13% 9% 13% 9% round 4px);
-  opacity:0;
-  transition:clip-path 1.25s var(--ease-out), opacity 1s var(--ease-out);
-}
-.feat-backdrop img{
-  width:100%; height:100%; object-fit:cover;
-  filter:blur(56px) brightness(.62) saturate(140%);
-  transform:scale(1.22);
-}
-.feat.is-in .feat-backdrop{ clip-path:inset(0 0 0 0 round 0); opacity:.9; }
-
-.feat-figure{
-  position:relative; z-index:1; margin:0; padding:0;
-  width:100%; max-width:min(1200px,84vw);
-  display:flex; flex-direction:column; align-items:center; gap:clamp(12px,2vh,22px);
-  opacity:0; transform:translateY(52px) scale(1.045); filter:blur(12px);
-  transition:opacity 1.15s var(--ease-out), transform 1.35s var(--ease-out), filter 1.15s var(--ease-out);
-}
-.feat.is-in .feat-figure{ opacity:1; transform:none; filter:blur(0); }
-
-.feat-btn{
-  position:relative; display:block; width:100%; padding:0; margin:0;
-  border-radius:3px; overflow:hidden; cursor:zoom-in;
-  box-shadow:0 40px 100px -30px rgba(0,0,0,.55), 0 4px 18px rgba(0,0,0,.16);
-  transition:box-shadow .7s var(--ease-out), transform .7s var(--ease-out);
-}
-.feat-btn img{ width:100%; height:auto; transition:transform 1.6s var(--ease-out); }
-.feat-btn:hover{ transform:translateY(-5px); box-shadow:0 56px 130px -30px rgba(0,0,0,.6), 0 6px 22px rgba(0,0,0,.2); }
-.feat-btn:hover img{ transform:scale(1.022); }
-.feat-btn:focus-visible{ outline:2px solid var(--ink); outline-offset:4px; }
-
-.feat-meta{
-  display:flex; align-items:baseline; gap:clamp(10px,1.6vw,20px);
-  width:100%; justify-content:center; flex-wrap:wrap;
-  opacity:0; transform:translateY(14px);
-  transition:opacity .9s var(--ease-out) .22s, transform .9s var(--ease-out) .22s;
-}
-.feat.is-in .feat-meta{ opacity:1; transform:none; }
-.feat-no{ font-size:11px; letter-spacing:.34em; color:var(--ink-2); font-variant-numeric:tabular-nums; }
-.feat-title{ font-size:clamp(14px,1.6vw,18px); font-weight:300; letter-spacing:.02em; }
-.feat-src{ font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-2); }
-.feat-src::before{ content:"·"; margin-right:.6em; opacity:.5; }
+.en{ font-family:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif; }
 
 /* ── 顶栏 ── */
 .topbar{
   position:fixed; inset:0 0 auto 0; z-index:60;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:22px var(--pad); color:#fff;
-  transition:background .6s var(--ease), color .6s var(--ease), padding .6s var(--ease), border-color .6s var(--ease);
-  border-bottom:1px solid transparent;
-}
-.topbar.is-stuck{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:18px var(--pad);
   background:color-mix(in srgb,var(--paper) 84%,transparent);
-  -webkit-backdrop-filter:saturate(180%) blur(16px); backdrop-filter:saturate(180%) blur(16px);
-  color:var(--ink); padding:13px var(--pad); border-bottom-color:var(--line);
+  -webkit-backdrop-filter:saturate(180%) blur(14px); backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid transparent;
+  transition:border-color .5s var(--ease), padding .5s var(--ease);
 }
-.brand{ font-size:15px; letter-spacing:.24em; text-transform:uppercase; font-weight:500; }
-.nav{ display:flex; gap:clamp(14px,2.2vw,32px); font-size:13px; letter-spacing:.12em; }
-.nav a{ opacity:.7; transition:opacity .35s var(--ease); }
-.nav a:hover{ opacity:1; }
-@media (max-width:640px){ .nav{ display:none; } }
+.topbar.is-scrolled{ border-bottom-color:var(--line); padding:12px var(--pad); }
+.brand{ font-size:13px; letter-spacing:.32em; text-transform:uppercase; font-weight:450; }
+.brand small{ display:block; font-size:10px; letter-spacing:.2em; color:var(--ink-2); margin-top:2px; }
+.nav{ display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; max-width:62vw; }
+.nav::-webkit-scrollbar{ display:none; }
+.nav button{
+  white-space:nowrap; padding:6px 11px; font-size:12.5px; letter-spacing:.06em;
+  color:var(--ink-2); border-radius:2px;
+  transition:color .35s var(--ease), background .35s var(--ease);
+}
+.nav button:hover{ color:var(--ink); }
+.nav button.is-on{ color:var(--ink); background:color-mix(in srgb,var(--ink) 8%,transparent); }
+@media (max-width:560px){ .nav{ display:none; } }
 
-/* ── 首图：缓慢推移（肯·伯恩斯） ── */
-.hero{ position:relative; height:100svh; min-height:540px; overflow:hidden; background:#0a0a0b; }
-.hero img{
-  width:100%; height:100%; object-fit:cover;
-  opacity:0; transform:scale(1.12);
-  animation:heroIn 2.6s var(--ease-out) .15s forwards, kenburns 26s ease-out 2.7s forwards;
+/* ── 封面 ── */
+.hero{ padding:clamp(130px,24vh,260px) var(--pad) clamp(90px,22vh,220px); }
+.hero .kicker{ font-size:11px; letter-spacing:.42em; text-transform:uppercase; color:var(--ink-2); }
+.hero h1{ margin:.34em 0 0; font-weight:200; letter-spacing:.012em; line-height:1.04; font-size:clamp(38px,9vw,132px); }
+.hero .sub{ margin:1.2em 0 0; max-width:38ch; color:var(--ink-2); font-size:clamp(13px,1.5vw,16px); }
+.hero .meta{
+  margin-top:clamp(40px,8vh,90px); padding-top:18px; border-top:1px solid var(--line);
+  display:flex; gap:clamp(16px,4vw,64px); flex-wrap:wrap;
+  font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-2);
 }
-@keyframes heroIn{ to{ opacity:1; transform:scale(1.02); } }
-@keyframes kenburns{ from{ transform:scale(1.02); } to{ transform:scale(1.10); } }
-.hero::after{
-  content:""; position:absolute; inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,.40) 0%,rgba(0,0,0,0) 32%,rgba(0,0,0,.08) 58%,rgba(0,0,0,.66) 100%);
-}
-.hero-inner{ position:absolute; z-index:2; left:var(--pad); right:var(--pad); bottom:clamp(30px,8vh,92px); color:#fff; }
-.kicker{ font-size:12px; letter-spacing:.36em; text-transform:uppercase; opacity:0; animation:rise .9s var(--ease-out) .5s forwards; }
-.hero-title{
-  margin:.45em 0 0; font-weight:300; letter-spacing:.01em; line-height:1.06;
-  font-size:clamp(32px,6.6vw,74px);
-  opacity:0; transform:translateY(26px); animation:rise 1.1s var(--ease-out) .62s forwards;
-}
-.hero-sub{
-  margin:.85em 0 0; max-width:44ch; font-weight:300; color:rgba(255,255,255,.84);
-  font-size:clamp(13px,1.5vw,15px);
-  opacity:0; transform:translateY(18px); animation:rise 1.1s var(--ease-out) .82s forwards;
-}
-@keyframes rise{ to{ opacity:1; transform:none; } }
-.scroll-hint{
-  position:absolute; z-index:2; left:50%; bottom:16px; translate:-50% 0;
-  width:1px; height:46px; background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.85));
-  animation:hint 2.4s ease-in-out infinite;
-}
-@keyframes hint{ 0%,100%{ opacity:.2; } 50%{ opacity:.9; } }
+.hero .meta b{ display:block; font-size:clamp(17px,2.2vw,26px); font-weight:300; letter-spacing:.02em; color:var(--ink); margin-top:6px; text-transform:none; }
 
-/* ── 章节头 ── */
-.section{ max-width:var(--maxw); margin:0 auto; padding:clamp(52px,10vh,124px) var(--pad) 0; }
-.sec-head{ display:flex; align-items:baseline; justify-content:space-between; gap:18px; flex-wrap:wrap; }
-.sec-title{ margin:0; font-weight:300; font-size:clamp(20px,2.5vw,30px); letter-spacing:.02em; }
-.sec-meta{ font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-2); }
-.rule{ height:1px; background:var(--line); margin:24px 0 0; }
-.filters{ display:flex; gap:8px; flex-wrap:wrap; margin-top:20px; }
-.chip{
-  padding:6px 14px; border:1px solid var(--line); border-radius:999px;
-  font-size:12px; letter-spacing:.08em; color:var(--ink-2);
-  transition:color .35s var(--ease), border-color .35s var(--ease), background .35s var(--ease);
+/* ── 版面 ── */
+.plate{ padding:var(--plate-gap) var(--pad) 0; }
+.plate:last-of-type{ padding-bottom:var(--plate-gap); }
+.plate-head{ max-width:1180px; }
+.plate-no{ font-size:11px; letter-spacing:.3em; color:var(--ink-3); font-variant-numeric:tabular-nums; }
+.plate-title{
+  margin:.5em 0 0; font-weight:250; letter-spacing:.02em;
+  font-size:clamp(22px,4.2vw,52px); line-height:1.15;
 }
-.chip:hover{ color:var(--ink); border-color:color-mix(in srgb,var(--ink) 34%,transparent); }
-.chip.is-on{ color:var(--paper); background:var(--ink); border-color:var(--ink); }
-
-/* ── 瀑布流：CSS 多列，天然形成交错的不规则排布 ── */
-.grid{
-  margin-top:clamp(18px,2.6vw,34px);
-  column-gap:var(--gap);
-  column-fill:balance;
+.plate-title .en{
+  display:block; margin-top:.7em; font-size:.3em; letter-spacing:.26em;
+  text-transform:uppercase; color:var(--ink-2); font-weight:400;
 }
-@media (min-width:1500px){ .grid{ column-count:4; } }
-@media (min-width:1024px) and (max-width:1499px){ .grid{ column-count:3; } }
-@media (min-width:640px) and (max-width:1023px){ .grid{ column-count:2; } }
-@media (max-width:639px){ .grid{ column-count:1; } }
+.plate-desc{
+  margin:clamp(18px,3.4vh,34px) 0 0; max-width:46ch;
+  font-size:clamp(13px,1.45vw,15.5px); color:var(--ink); line-height:1.8;
+}
+.plate-desc .en{ display:block; margin-top:.5em; color:var(--ink-2); font-size:.86em; line-height:1.7; }
+.plate-meta{ margin-top:clamp(12px,2vh,20px); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); }
 
-.card{
-  display:block; width:100%; padding:0; margin:0 0 var(--gap);
+/* 图片区：多列 + 每张不同宽度 → 大小交错。
+   每版只有 2~4 张，用 2 列就够（3 列会让每张偏窄、且刚够一列 1~2 张显得散）。 */
+.plate-body{ margin-top:clamp(46px,9vh,120px); column-count:2; column-gap:clamp(20px,3.4vw,64px); }
+@media (max-width:720px){ .plate-body{ column-count:1; } }
+
+.shot{
   break-inside:avoid; -webkit-column-break-inside:avoid; page-break-inside:avoid;
-  position:relative; overflow:hidden; border-radius:2px;
-  background:color-mix(in srgb,var(--ink) 6%,transparent);
-  /* 纵向错位用 --st 变量控制：打破整齐的行基线，制造随机感 */
-  --st:0px; --hov:0px;
-  transform:translateY(calc(var(--st) + var(--hov)));
-  opacity:0; filter:blur(7px);
-  transition:opacity .9s var(--ease-out), filter .9s var(--ease-out),
-             translate .5s var(--ease-out), box-shadow .6s var(--ease-out);
-  transition-delay:var(--d,0ms);
+  width:var(--w,100%);
+  margin:0 0 clamp(34px,7vh,86px);
+  margin-left:var(--shift,0);
+  opacity:0; transform:translateY(44px); filter:blur(11px);
+  transition:opacity 1.1s var(--ease-out), transform 1.25s var(--ease-out), filter 1.1s var(--ease-out);
+  transition-delay:var(--delay,0ms);
+  will-change:opacity, transform;
 }
-.card.is-in{ opacity:1; filter:blur(0); }
-.card:hover{ --hov:-4px; box-shadow:0 18px 46px rgba(0,0,0,.18); }
-.card:focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
-.card img{
-  width:100%; height:auto;
-  transition:transform 1.4s var(--ease-out), opacity .8s var(--ease);
+.shot.is-in{ opacity:1; transform:none; filter:blur(0); }
+.shot-btn{
+  display:block; width:100%; padding:0; position:relative; overflow:hidden;
+  background:color-mix(in srgb,var(--ink) 5%,transparent); border-radius:1px; cursor:zoom-in;
+  transition:box-shadow .7s var(--ease-out);
 }
-.card img.is-loading{ opacity:0; }
-.card:hover img{ transform:scale(1.035); }
+/* 视差用：图片在框内缓慢位移 + 轻微放大（保证位移时不露边） */
+.shot-inner{ transform:translate3d(0,var(--py,0px),0) scale(1.06); transition:transform .9s var(--ease-out); }
+.shot-btn img{ width:100%; height:auto; display:block; }
+.shot-btn:hover{ box-shadow:0 34px 80px -26px rgba(0,0,0,.45); }
+.shot-btn:hover .shot-inner{ transform:translate3d(0,var(--py,0px),0) scale(1.09); }
+.shot-btn:focus-visible{ outline:1.5px solid var(--ink); outline-offset:5px; }
 
-/* 竖构图稍作强调：细阴影 + 悬停时更明显，免得夹在横图里显得单薄 */
-.card[data-orient="portrait"]{ box-shadow:0 2px 10px rgba(0,0,0,.05); }
-.card[data-orient="portrait"]:hover{ box-shadow:0 22px 52px rgba(0,0,0,.22); }
-
-.cap{
-  position:absolute; inset:auto 0 0 0; z-index:2;
-  padding:26px 12px 10px; color:#fff; text-align:left;
-  background:linear-gradient(transparent,rgba(0,0,0,.58));
-  font-size:12px; letter-spacing:.1em;
-  opacity:0; transform:translateY(8px);
-  transition:opacity .5s var(--ease), transform .5s var(--ease);
+/* 每张图的简短介绍：图片下方、与图片左对齐，序号 + 中文 + 英文 */
+.shot-cap{
+  margin:clamp(9px,1.5vh,15px) 0 0;
+  display:flex; gap:clamp(8px,1vw,14px); align-items:baseline;
 }
-.card:hover .cap,.card:focus-visible .cap{ opacity:1; transform:none; }
-@media (hover:none){ .cap{ opacity:1; transform:none; } }
-.empty{ padding:40px 0; color:var(--ink-2); font-size:14px; }
+.shot-no{
+  flex:none; font-size:10.5px; letter-spacing:.16em; color:var(--ink-3);
+  font-variant-numeric:tabular-nums; padding-top:2px;
+}
+.shot-cap-body{ min-width:0; }
+.shot-cap-zh{ display:block; font-size:clamp(12px,1.25vw,14px); line-height:1.65; color:var(--ink); }
+.shot-cap-en{ display:block; margin-top:3px; font-size:clamp(10.5px,1vw,11.5px); line-height:1.55; color:var(--ink-2); }
+@media (max-width:720px){ .shot{ width:100% !important; margin-left:0 !important; } }
 
-/* ── 关于 ── */
-.about{ display:grid; grid-template-columns:1fr; gap:clamp(18px,3.5vw,52px); margin-top:clamp(18px,3vw,38px); }
-@media (min-width:880px){ .about{ grid-template-columns:1.15fr .85fr; align-items:start; } }
-.about p{ margin:0 0 1em; font-weight:300; font-size:clamp(14px,1.5vw,16px); color:var(--ink-2); max-width:62ch; }
-.about p:first-of-type{ color:var(--ink); font-size:clamp(16px,1.9vw,20px); line-height:1.55; }
-.facts{ list-style:none; margin:0; padding:0; border-top:1px solid var(--line); }
-.facts li{ display:flex; justify-content:space-between; gap:14px; padding:12px 0; border-bottom:1px solid var(--line); font-size:13px; }
-.facts .k{ color:var(--ink-2); letter-spacing:.06em; }
-
-.foot{ max-width:var(--maxw); margin:0 auto; padding:clamp(52px,8vh,104px) var(--pad) 40px; }
+/* ── 页脚 ── */
+.foot{ padding:clamp(60px,12vh,150px) var(--pad) 48px; }
 .foot-in{
-  display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; align-items:baseline;
-  border-top:1px solid var(--line); padding-top:24px;
-  font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-2);
+  border-top:1px solid var(--line); padding-top:26px;
+  display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap;
+  font-size:11.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-2);
 }
 
 /* ── 灯箱 ── */
 .lb{
   position:fixed; inset:0; z-index:100; display:grid; grid-template-rows:auto 1fr auto;
-  background:color-mix(in srgb,#000 93%,transparent);
-  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  background:color-mix(in srgb,#0a0a0a 95%,transparent);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
   opacity:0; visibility:hidden; transition:opacity .45s var(--ease), visibility .45s;
 }
 .lb.is-open{ opacity:1; visibility:visible; }
-.lb-top{ display:flex; justify-content:space-between; align-items:center; padding:16px var(--pad); color:rgba(255,255,255,.85); font-size:12px; letter-spacing:.16em; }
+.lb-top{ display:flex; justify-content:space-between; align-items:center; padding:16px var(--pad); color:rgba(255,255,255,.82); font-size:11.5px; letter-spacing:.2em; }
 .lb-stage{ position:relative; display:grid; place-items:center; padding:0 var(--pad); min-height:0; }
 .lb-stage img{
   max-width:100%; max-height:100%; object-fit:contain;
-  opacity:0; transform:scale(.97);
-  transition:opacity .5s var(--ease-out), transform .5s var(--ease-out);
-  box-shadow:0 34px 90px rgba(0,0,0,.6);
+  opacity:0; transform:scale(.965);
+  transition:opacity .55s var(--ease-out), transform .7s var(--ease-out);
+  box-shadow:0 40px 110px rgba(0,0,0,.66);
 }
 .lb-stage img.is-shown{ opacity:1; transform:scale(1); }
 .lb-btn{
-  display:grid; place-items:center; width:46px; height:46px; border-radius:999px;
-  color:#fff; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2);
-  font-size:19px; line-height:1; transition:background .3s var(--ease), transform .3s var(--ease);
+  display:grid; place-items:center; min-width:44px; height:44px; padding:0 14px; border-radius:999px;
+  color:#fff; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.22);
+  font-size:14px; transition:background .3s var(--ease), transform .3s var(--ease);
 }
-.lb-btn:hover{ background:rgba(255,255,255,.22); }
+.lb-btn:hover{ background:rgba(255,255,255,.2); }
 .lb-btn:active{ transform:scale(.94); }
-.lb-arrow{ position:absolute; top:50%; translate:0 -50%; z-index:3; }
-.lb-prev{ left:calc(var(--pad) + 4px); } .lb-next{ right:calc(var(--pad) + 4px); }
-.lb-close{ padding:7px 14px; border-radius:999px; }
-.lb-foot{ padding:14px var(--pad) 22px; color:rgba(255,255,255,.62); font-size:12px; letter-spacing:.1em; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
-:focus-visible{ outline:2px solid currentColor; outline-offset:3px; }
+.lb-arrow{ position:absolute; top:50%; translate:0 -50%; z-index:3; font-size:19px; min-width:46px; }
+.lb-prev{ left:calc(var(--pad) + 2px); } .lb-next{ right:calc(var(--pad) + 2px); }
+.lb-foot{ padding:14px var(--pad) 22px; color:rgba(255,255,255,.6); font-size:11.5px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.lb-foot .lb-cap{ color:rgba(255,255,255,.88); max-width:60ch; }
+.lb-foot .lb-cap .en{ display:block; color:rgba(255,255,255,.58); margin-top:3px; }
 @media (max-width:620px){ .lb-arrow{ display:none; } }
+
+.totop{
+  position:fixed; right:clamp(14px,3vw,34px); bottom:clamp(14px,3vw,34px); z-index:55;
+  width:44px; height:44px; border-radius:999px; display:grid; place-items:center;
+  background:color-mix(in srgb,var(--ink) 88%,transparent); color:var(--paper);
+  font-size:15px; opacity:0; visibility:hidden; transform:translateY(10px);
+  transition:opacity .4s var(--ease), transform .4s var(--ease), visibility .4s;
+}
+.totop.is-on{ opacity:1; visibility:visible; transform:none; }
+:focus-visible{ outline:2px solid currentColor; outline-offset:3px; }
 </style>
 </head>
 <body>
 
-<div class="bg-blur" aria-hidden="true"></div>
-
 <header class="topbar" id="topbar">
-  <a class="brand" href="#top">Sprind</a>
-  <nav class="nav"><a href="#featured">精选</a><a href="#work">作品</a><a href="#about">关于</a></nav>
+  <div class="brand">Sprind<small>Photography</small></div>
+  <nav class="nav" id="nav" aria-label="地区导航"></nav>
 </header>
 
-<main id="top">
-  <section class="hero" id="hero">
-    <img id="heroImg" alt="" decoding="async" fetchpriority="high">
-    <div class="hero-inner">
-      <p class="kicker">Photography</p>
-      <h1 class="hero-title">光经过的地方</h1>
-      <p class="hero-sub">城市的天际线、海边的黄昏、旅途里随手按下的那些。相机只是借口。</p>
-    </div>
-    <div class="scroll-hint" aria-hidden="true"></div>
+<main>
+  <section class="hero">
+    <p class="kicker">Selected Works · 2024–2026</p>
+    <h1>光经过的地方</h1>
+    <p class="sub">从新疆的高原湖泊到川西的雪山寺院，从大连的海岸到青岛的红瓦。</p>
+    <div class="meta" id="heroMeta"></div>
   </section>
 
-  <section class="section featured" id="featured">
-    <div class="sec-head">
-      <h2 class="sec-title">精选</h2>
-      <div class="sec-meta">Selected · <span id="featCount">—</span></div>
-    </div>
-    <div class="rule"></div>
-    <div class="featured-list" id="featuredList"></div>
-  </section>
+  <div id="plates"></div>
 
-  <section class="section" id="work">
-    <div class="sec-head">
-      <h2 class="sec-title">作品</h2>
-      <div class="sec-meta"><span id="count">—</span> 张 · <span id="range">—</span></div>
+  <footer class="foot">
+    <div class="foot-in">
+      <span>© <span id="year"></span> Sprind</span>
+      <span id="footCount">—</span>
     </div>
-    <div class="rule"></div>
-    <div class="filters" id="filters" role="group" aria-label="按构图筛选">
-      <button class="chip is-on" data-filter="all">全部</button>
-      <button class="chip" data-filter="landscape">横构图</button>
-      <button class="chip" data-filter="portrait">竖构图</button>
-      <button class="chip" data-filter="square">方构图</button>
-    </div>
-    <div class="grid" id="grid"></div>
-    <noscript><p class="empty">这个页面需要 JavaScript 来排列作品。</p></noscript>
-  </section>
-
-  <section class="section" id="about">
-    <div class="sec-head"><h2 class="sec-title">关于</h2><div class="sec-meta">About</div></div>
-    <div class="rule"></div>
-    <div class="about">
-      <div>
-        <p>我用一台相机记录那些不打算被记住的瞬间——傍晚被云压住的天、楼顶看下去的城市、朋友走在前面的背影。</p>
-        <p>不追求宏大叙事，也不太做重度后期。按下快门那一刻看到的，就是我想留下的。</p>
-        <p>如果某张照片让你多停了一下，那它就完成了它的工作。</p>
-      </div>
-      <ul class="facts">
-        <li><span class="k">器材</span><span class="v" id="factGear">—</span></li>
-        <li><span class="k">作品数量</span><span class="v" id="factCount">—</span></li>
-        <li><span class="k">构图</span><span class="v" id="factOrient">—</span></li>
-        <li><span class="k">地点</span><span class="v">中国</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <footer class="foot" id="contact">
-    <div class="foot-in"><span>© <span id="year"></span> Sprind</span><span>保留所有权利</span></div>
   </footer>
 </main>
+
+<button class="totop" id="totop" aria-label="回到顶部">↑</button>
 
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="作品大图">
   <div class="lb-top">
     <span id="lbIdx">—</span>
-    <button class="lb-btn lb-close" id="lbClose" aria-label="关闭（Esc）">关闭</button>
+    <button class="lb-btn" id="lbClose" aria-label="关闭（Esc）">关闭</button>
   </div>
   <div class="lb-stage" id="lbStage">
     <button class="lb-btn lb-arrow lb-prev" id="lbPrev" aria-label="上一张（←）">‹</button>
     <img id="lbImg" alt="">
     <button class="lb-btn lb-arrow lb-next" id="lbNext" aria-label="下一张（→）">›</button>
   </div>
-  <div class="lb-foot"><span id="lbMeta">—</span><span>← → 切换 · Esc 关闭</span></div>
+  <div class="lb-foot">
+    <span class="lb-cap" id="lbCap"></span>
+    <span>← → 切换 · Esc 关闭</span>
+  </div>
 </div>
 
 <script>
 /* ============================================================
-   作品数据（自动生成）
-   顺序已在构建时做过「确定性打乱 + 横竖交错」，并给每张分配了
-   纵向错位量 stagger（0/7/14px）——刷新页面不会变。
-   想加标题/地点：给对应条目加 title:'…' / place:'…'。
+   数据：版面列表（含整版双语说明与版内每张的宽度）
    ============================================================ */
-const PHOTOS = [{"full":"photos/012_DSC_5034.jpg","grid":"grid/012_DSC_5034.jpg","backdrop":"thumb/012_DSC_5034.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"DSC_5034","source":"Nikon","stagger":14,"idx":0},{"full":"photos/035_IMG_20260731_215609.jpg","grid":"grid/035_IMG_20260731_215609.jpg","backdrop":"thumb/035_IMG_20260731_215609.jpg","w":1968,"h":1312,"ratio":1.5,"orient":"landscape","name":"IMG_20260731_215609","source":"手机","stagger":7,"idx":1},{"full":"photos/032_IMG_20250225_094159.jpg","grid":"grid/032_IMG_20250225_094159.jpg","backdrop":"thumb/032_IMG_20250225_094159.jpg","w":2400,"h":1598,"ratio":1.5019,"orient":"landscape","name":"IMG_20250225_094159","source":"手机","stagger":0,"idx":2},{"full":"photos/022_DSC_6860.jpg","grid":"grid/022_DSC_6860.jpg","backdrop":"thumb/022_DSC_6860.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"DSC_6860","source":"Nikon","stagger":7,"idx":3},{"full":"photos/028_Image_1727096018555.jpg","grid":"grid/028_Image_1727096018555.jpg","backdrop":"thumb/028_Image_1727096018555.jpg","w":1494,"h":997,"ratio":1.4985,"orient":"landscape","name":"Image_1727096018555","source":"手机","stagger":0,"idx":4},{"full":"photos/021_DSC_6856.jpg","grid":"grid/021_DSC_6856.jpg","backdrop":"thumb/021_DSC_6856.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"DSC_6856","source":"Nikon","stagger":14,"idx":5},{"full":"photos/034_IMG_20260731_012856.jpg","grid":"grid/034_IMG_20260731_012856.jpg","backdrop":"thumb/034_IMG_20260731_012856.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"IMG_20260731_012856","source":"手机","stagger":14,"idx":6},{"full":"photos/042_IMG20260730084558.jpg","grid":"grid/042_IMG20260730084558.jpg","backdrop":"thumb/042_IMG20260730084558.jpg","w":2400,"h":2399,"ratio":1.0004,"orient":"square","name":"IMG20260730084558","source":"手机","stagger":7,"idx":7},{"full":"photos/019_DSC_5611.jpg","grid":"grid/019_DSC_5611.jpg","backdrop":"thumb/019_DSC_5611.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"DSC_5611","source":"Nikon","stagger":7,"idx":8},{"full":"photos/015_DSC_5253.jpg","grid":"grid/015_DSC_5253.jpg","backdrop":"thumb/015_DSC_5253.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"DSC_5253","source":"Nikon","stagger":14,"idx":9},{"full":"photos/026_Image_1719634237255.jpg","grid":"grid/026_Image_1719634237255.jpg","backdrop":"thumb/026_Image_1719634237255.jpg","w":2400,"h":1596,"ratio":1.5038,"orient":"landscape","name":"Image_1719634237255","source":"手机","stagger":7,"idx":10},{"full":"photos/009_DSC_3220.jpg","grid":"grid/009_DSC_3220.jpg","backdrop":"thumb/009_DSC_3220.jpg","w":2400,"h":1597,"ratio":1.5028,"orient":"landscape","name":"DSC_3220","source":"Nikon","stagger":0,"idx":11},{"full":"photos/006_DSC_1224.jpg","grid":"grid/006_DSC_1224.jpg","backdrop":"thumb/006_DSC_1224.jpg","w":2400,"h":1597,"ratio":1.5028,"orient":"landscape","name":"DSC_1224","source":"Nikon","stagger":7,"idx":12},{"full":"photos/037_IMG20240816183126.jpg","grid":"grid/037_IMG20240816183126.jpg","backdrop":"thumb/037_IMG20240816183126.jpg","w":1440,"h":1080,"ratio":1.3333,"orient":"landscape","name":"IMG20240816183126","source":"手机","stagger":0,"idx":13},{"full":"photos/031_IMG_20241227_132724.jpg","grid":"grid/031_IMG_20241227_132724.jpg","backdrop":"thumb/031_IMG_20241227_132724.jpg","w":2400,"h":1598,"ratio":1.5019,"orient":"landscape","name":"IMG_20241227_132724","source":"手机","stagger":14,"idx":14},{"full":"photos/033_IMG_20260122_214052.jpg","grid":"grid/033_IMG_20260122_214052.jpg","backdrop":"thumb/033_IMG_20260122_214052.jpg","w":2400,"h":1602,"ratio":1.4981,"orient":"landscape","name":"IMG_20260122_214052","source":"手机","stagger":0,"idx":15},{"full":"photos/016_DSC_5293.jpg","grid":"grid/016_DSC_5293.jpg","backdrop":"thumb/016_DSC_5293.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"DSC_5293","source":"Nikon","stagger":14,"idx":16},{"full":"photos/027_Image_1727096013942.jpg","grid":"grid/027_Image_1727096013942.jpg","backdrop":"thumb/027_Image_1727096013942.jpg","w":1620,"h":1080,"ratio":1.5,"orient":"landscape","name":"Image_1727096013942","source":"手机","stagger":0,"idx":17},{"full":"photos/017_DSC_5444.jpg","grid":"grid/017_DSC_5444.jpg","backdrop":"thumb/017_DSC_5444.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"DSC_5444","source":"Nikon","stagger":7,"idx":18},{"full":"photos/023_DSC_7325.jpg","grid":"grid/023_DSC_7325.jpg","backdrop":"thumb/023_DSC_7325.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"DSC_7325","source":"Nikon","stagger":14,"idx":19},{"full":"photos/038_IMG20240906150325.jpg","grid":"grid/038_IMG20240906150325.jpg","backdrop":"thumb/038_IMG20240906150325.jpg","w":1440,"h":1080,"ratio":1.3333,"orient":"landscape","name":"IMG20240906150325","source":"手机","stagger":0,"idx":20},{"full":"photos/002_000159910006.jpg","grid":"grid/002_000159910006.jpg","backdrop":"thumb/002_000159910006.jpg","w":1846,"h":1840,"ratio":1.0033,"orient":"square","name":"000159910006","source":"翻拍","stagger":7,"idx":21},{"full":"photos/036_IMG20240816175334.jpg","grid":"grid/036_IMG20240816175334.jpg","backdrop":"thumb/036_IMG20240816175334.jpg","w":2400,"h":1800,"ratio":1.3333,"orient":"landscape","name":"IMG20240816175334","source":"手机","stagger":7,"idx":22},{"full":"photos/020_DSC_6825.jpg","grid":"grid/020_DSC_6825.jpg","backdrop":"thumb/020_DSC_6825.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"DSC_6825","source":"Nikon","stagger":7,"idx":23},{"full":"photos/039_IMG20260121163046.jpg","grid":"grid/039_IMG20260121163046.jpg","backdrop":"thumb/039_IMG20260121163046.jpg","w":2400,"h":1800,"ratio":1.3333,"orient":"landscape","name":"IMG20260121163046","source":"手机","stagger":7,"idx":24},{"full":"photos/008_DSC_2872 (1).jpg","grid":"grid/008_DSC_2872 (1).jpg","backdrop":"thumb/008_DSC_2872 (1).jpg","w":2400,"h":1597,"ratio":1.5028,"orient":"landscape","name":"DSC_2872 (1)","source":"Nikon","stagger":14,"idx":25},{"full":"photos/010_DSC_3977 (1).jpg","grid":"grid/010_DSC_3977 (1).jpg","backdrop":"thumb/010_DSC_3977 (1).jpg","w":2400,"h":1597,"ratio":1.5028,"orient":"landscape","name":"DSC_3977 (1)","source":"Nikon","stagger":0,"idx":26},{"full":"photos/030_IMG_20241105_192306.jpg","grid":"grid/030_IMG_20241105_192306.jpg","backdrop":"thumb/030_IMG_20241105_192306.jpg","w":2400,"h":1597,"ratio":1.5028,"orient":"landscape","name":"IMG_20241105_192306","source":"手机","stagger":0,"idx":27},{"full":"photos/007_DSC_2808 (1).jpg","grid":"grid/007_DSC_2808 (1).jpg","backdrop":"thumb/007_DSC_2808 (1).jpg","w":2400,"h":1597,"ratio":1.5028,"orient":"landscape","name":"DSC_2808 (1)","source":"Nikon","stagger":0,"idx":28},{"full":"photos/013_DSC_5046.jpg","grid":"grid/013_DSC_5046.jpg","backdrop":"thumb/013_DSC_5046.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"DSC_5046","source":"Nikon","stagger":0,"idx":29},{"full":"photos/040_IMG20260424190701.jpg","grid":"grid/040_IMG20260424190701.jpg","backdrop":"thumb/040_IMG20260424190701.jpg","w":2400,"h":1800,"ratio":1.3333,"orient":"landscape","name":"IMG20260424190701","source":"手机","stagger":14,"idx":30},{"full":"photos/029_IMG_20240812_212203.jpg","grid":"grid/029_IMG_20240812_212203.jpg","backdrop":"thumb/029_IMG_20240812_212203.jpg","w":1625,"h":2400,"ratio":0.6771,"orient":"portrait","name":"IMG_20240812_212203","source":"手机","stagger":0,"idx":31},{"full":"photos/018_DSC_5572.jpg","grid":"grid/018_DSC_5572.jpg","backdrop":"thumb/018_DSC_5572.jpg","w":2400,"h":1600,"ratio":1.5,"orient":"landscape","name":"DSC_5572","source":"Nikon","stagger":14,"idx":32},{"full":"photos/011_DSC_5021 (1).jpg","grid":"grid/011_DSC_5021 (1).jpg","backdrop":"thumb/011_DSC_5021 (1).jpg","w":1600,"h":2400,"ratio":0.6667,"orient":"portrait","name":"DSC_5021 (1)","source":"Nikon","stagger":14,"idx":33}];
-
-/* 精选区数据（顺序即展示顺序，与下方网格互不重复） */
-const FEATURED = [{"full":"photos/004_dji_fly_20260731_210900_151_1785503369729_photo_.jpg","grid":"grid/004_dji_fly_20260731_210900_151_1785503369729_photo_.jpg","backdrop":"thumb/004_dji_fly_20260731_210900_151_1785503369729_photo_.jpg","w":2400,"h":1350,"ratio":1.7778,"orient":"landscape","name":"dji_fly_20260731_210900_151_1785503369729_photo_","source":"DJI","idx":0,"no":"01","title":"河谷的金色时刻","place":"无人机"},{"full":"photos/003_dji_fly_20260729_214218_51_1785332687981_photo_o.jpg","grid":"grid/003_dji_fly_20260729_214218_51_1785332687981_photo_o.jpg","backdrop":"thumb/003_dji_fly_20260729_214218_51_1785332687981_photo_o.jpg","w":2400,"h":1350,"ratio":1.7778,"orient":"landscape","name":"dji_fly_20260729_214218_51_1785332687981_photo_o","source":"DJI","idx":1,"no":"02","title":"穿过草原的公路","place":"无人机"},{"full":"photos/024_DSC_7515.jpg","grid":"grid/024_DSC_7515.jpg","backdrop":"thumb/024_DSC_7515.jpg","w":2400,"h":1597,"ratio":1.5028,"orient":"landscape","name":"DSC_7515","source":"Nikon","idx":2,"no":"03","title":"水的两种蓝","place":"九寨沟"},{"full":"photos/014_DSC_5198.jpg","grid":"grid/014_DSC_5198.jpg","backdrop":"thumb/014_DSC_5198.jpg","w":1600,"h":2400,"ratio":0.6667,"orient":"portrait","name":"DSC_5198","source":"Nikon","idx":3,"no":"04","title":"雾凇与晴空","place":""},{"full":"photos/025_DSC_9549.jpg","grid":"grid/025_DSC_9549.jpg","backdrop":"thumb/025_DSC_9549.jpg","w":2400,"h":1920,"ratio":1.25,"orient":"landscape","name":"DSC_9549","source":"Nikon","idx":4,"no":"05","title":"山谷里的村落","place":"扎尕那"},{"full":"photos/041_IMG20260726214118.jpg","grid":"grid/041_IMG20260726214118.jpg","backdrop":"thumb/041_IMG20260726214118.jpg","w":2400,"h":1800,"ratio":1.3333,"orient":"landscape","name":"IMG20260726214118","source":"手机","idx":5,"no":"06","title":"烟囱与满月","place":""},{"full":"photos/001_000050.jpg","grid":"grid/001_000050.jpg","backdrop":"thumb/001_000050.jpg","w":2400,"h":1605,"ratio":1.4953,"orient":"landscape","name":"000050","source":"翻拍","idx":6,"no":"07","title":"机翼之上","place":""},{"full":"photos/005_DSC_0218.jpg","grid":"grid/005_DSC_0218.jpg","backdrop":"thumb/005_DSC_0218.jpg","w":2400,"h":1597,"ratio":1.5028,"orient":"landscape","name":"DSC_0218","source":"Nikon","idx":7,"no":"08","title":"城市与远山","place":""}];
+const PLATES = [{"no":1,"place":"新疆","regionName":"新疆","regionEn":"Xinjiang","regionId":"xinjiang","places":["新疆"],"part":{"i":1,"n":5},"zh":"高原湖泊、雪山与草场，红路穿过金色的河谷","en":"Alpine lakes, snow peaks and pasture, a red road cutting through a golden valley.","items":[{"out":"041_喀纳斯 (1).jpg","orient":"landscape","ratio":1.5,"pw":100,"ph":2016,"width":100,"shift":0,"szh":"左岸红色漂流艇与乳蓝色冰川河，两岸松林在阴云下延伸","sen":"Turquoise glacial river with red rafts, pine forest lining both banks under overcast sky"},{"out":"042_喀纳斯 (2).jpg","orient":"landscape","ratio":1.5,"pw":72,"ph":2016,"width":72,"shift":5,"szh":"暮色里针叶林环抱的高山湖泊，薄雾漫过草甸与远山","sen":"A misty alpine lake ringed by conifers, meadows fading into foggy hills at dusk"},{"out":"060_新疆 (1).jpg","orient":"landscape","ratio":1.3333,"pw":86,"ph":6144,"width":86,"shift":0,"szh":"暮色蓝调，满月悬于云层，红砖烟囱立于居民楼群之上","sen":"Blue-hour sky with a full moon and a lone red brick chimney above apartment blocks"},{"out":"061_新疆 (1).jpg","orient":"landscape","ratio":1.5,"pw":62,"ph":2016,"width":62,"shift":10,"szh":"沙丘上的木质观景塔倒映在粉红浅水中，云层低垂","sen":"A wooden viewing tower reflects in pink shallows beneath low storm clouds."}]},{"no":2,"place":"新疆","regionName":"新疆","regionEn":"Xinjiang","regionId":"xinjiang","places":["新疆"],"part":{"i":2,"n":5},"zh":"高原湖泊、雪山与草场，红路穿过金色的河谷","en":"Alpine lakes, snow peaks and pasture, a red road cutting through a golden valley.","items":[{"out":"062_新疆 (2).jpg","orient":"landscape","ratio":1.7778,"pw":100,"ph":2250,"width":100,"shift":0,"szh":"夕照下辫状河穿过杨树林与草坡，岸旁停着几辆车","sen":"At sunset, a braided river winds past cottonwood groves and grassy slopes where cars are parked."},{"out":"063_新疆 (3).jpg","orient":"square","ratio":1.0033,"pw":74,"ph":1840,"width":74,"shift":5,"szh":"暮色紫红云层下，居民楼与信号塔剪影浮现在天际","sen":"Crimson clouds drift over silhouetted apartment blocks and a telecom tower at dusk."},{"out":"064_新疆 (4).jpg","orient":"landscape","ratio":1.5,"pw":86,"ph":2016,"width":86,"shift":0,"szh":"针叶林山坡下，牛群在午后草甸上吃草，云影掠过山脊","sen":"Cattle graze on a green meadow below dense conifer slopes under a cloud-streaked sky."},{"out":"065_新疆 (5).jpg","orient":"landscape","ratio":1.5,"pw":62,"ph":2016,"width":62,"shift":10,"szh":"阴天山路上，背包客沿弯道走向层叠远山","sen":"A lone backpacker walks a curving mountain road toward layered peaks under overcast skies."}]},{"no":3,"place":"新疆","regionName":"新疆","regionEn":"Xinjiang","regionId":"xinjiang","places":["新疆"],"part":{"i":3,"n":5},"zh":"高原湖泊、雪山与草场，红路穿过金色的河谷","en":"Alpine lakes, snow peaks and pasture, a red road cutting through a golden valley.","items":[{"out":"066_新疆 (6).jpg","orient":"landscape","ratio":1.7778,"pw":100,"ph":2250,"width":100,"shift":0,"szh":"干旱峡谷间辫状河道蜿蜒，层岩崖壁裸露在蓝天白云下。","sen":"A braided river winds through a dry layered canyon under blue sky and clouds."},{"out":"067_新疆.jpg","orient":"landscape","ratio":1.5,"pw":72,"ph":2016,"width":72,"shift":5,"szh":"阳光穿过树枝，浅溪卵石间的水面泛起光斑","sen":"Sunlight through branches, glints on shallow water among stream pebbles"},{"out":"068_新疆赛里木湖 (1).jpg","orient":"landscape","ratio":1.5,"pw":86,"ph":1312,"width":86,"shift":0,"szh":"晴空下，红衣女子沿石堤走过红白灯塔，身后是蓝湖与远山","sen":"Under clear skies, a woman in red walks past a red-and-white beacon beside the blue lake and mountains"},{"out":"069_新疆赛里木湖 (2).jpg","orient":"square","ratio":1.0003,"pw":74,"ph":3071,"width":74,"shift":10,"szh":"浅水倒映云影，绿草甸接金黄草场，雪山横亘天际","sen":"Shallow water mirrors clouds; green marsh grass meets golden meadow below snow peaks."}]},{"no":4,"place":"新疆","regionName":"新疆","regionEn":"Xinjiang","regionId":"xinjiang","places":["新疆"],"part":{"i":4,"n":5},"zh":"高原湖泊、雪山与草场，红路穿过金色的河谷","en":"Alpine lakes, snow peaks and pasture, a red road cutting through a golden valley.","items":[{"out":"070_新疆赛里木湖 (3).jpg","orient":"landscape","ratio":1.5,"pw":100,"ph":2016,"width":100,"shift":0,"szh":"暮色中银色SUV停在红黑公路，草原、湖面与远山泛着紫蓝","sen":"At dusk, a silver SUV parked on a red-and-black road, grassland, lake and mountains in purple-blue."},{"out":"071_新疆赛里木湖 (4).jpg","orient":"landscape","ratio":1.7778,"pw":72,"ph":2250,"width":72,"shift":5,"szh":"深蓝湖面延展至天际，远处山脉横陈，右侧积云堆叠","sen":"Deep blue water stretches to the horizon, distant mountains beneath a sky stacked with cumulus clouds."},{"out":"072_新疆赛里木湖 (5).jpg","orient":"landscape","ratio":1.7778,"pw":86,"ph":2250,"width":86,"shift":0,"szh":"晴空下湛蓝湖岸，红路上一辆黑色SUV与举气球的女子","sen":"Under clear skies, a black SUV on a red lakeside road, a woman raising balloons on the grass"}]},{"no":5,"place":"新疆","regionName":"新疆","regionEn":"Xinjiang","regionId":"xinjiang","places":["新疆"],"part":{"i":5,"n":5},"zh":"高原湖泊、雪山与草场，红路穿过金色的河谷","en":"Alpine lakes, snow peaks and pasture, a red road cutting through a golden valley.","items":[{"out":"073_新疆赛里木湖 (6).jpg","orient":"landscape","ratio":1.7778,"pw":100,"ph":2250,"width":100,"shift":0,"szh":"高原湖岸公路沿金黄草甸延伸，远山与积云映在湛蓝湖面上","sen":"A lakeside highway curves past golden grasslands beneath distant mountains and cumulus clouds."},{"out":"074_新疆赛里木湖 (7).jpg","orient":"landscape","ratio":1.7778,"pw":72,"ph":2250,"width":72,"shift":5,"szh":"阴云下，红边公路穿过黄绿草甸，弯向远湖与深色山脊","sen":"Under heavy clouds, a red-edged road curves across tawny grassland toward a distant lake and dark ridges."},{"out":"075_新疆赛里木湖.jpg","orient":"landscape","ratio":1.5,"pw":86,"ph":2016,"width":86,"shift":0,"szh":"晴日高原湖泊上，三艘游船破开粼粼波光，远山横亘天际。","sen":"Three tour boats cross a glittering high-altitude lake beneath distant mountains on a clear day."}]},{"no":6,"place":"川西","regionName":"川西","regionEn":"West Sichuan","regionId":"chuanxi","places":["川西"],"part":{"i":1,"n":2},"zh":"川西高原的草甸与雪山，牦牛散落在坡上","en":"Highland meadows and snow peaks of western Sichuan, yaks scattered across the slopes.","items":[{"out":"001_川西 (1).jpg","orient":"portrait","ratio":0.6667,"pw":64,"ph":3024,"width":64,"shift":0,"szh":"绿坡起伏，草甸受光，灰岩尖峰立于积云之下","sen":"Rolling green meadows, sunlit ridges, and a jagged grey peak beneath cumulus clouds."},{"out":"002_川西 (2).jpg","orient":"landscape","ratio":1.5,"pw":72,"ph":2016,"width":72,"shift":5,"szh":"云层下灰色岩峰拔起于起伏的绿色草甸之上","sen":"Grey rocky peaks rise above rolling green meadows beneath a cloud-streaked sky."},{"out":"003_川西 (3).jpg","orient":"landscape","ratio":1.503,"pw":86,"ph":4024,"width":86,"shift":0,"szh":"暖色晨光穿过浓雾，照亮林间小屋与树影","sen":"Warm morning light filters through thick fog, lighting a small hut and trees."},{"out":"004_川西 (4).jpg","orient":"landscape","ratio":1.503,"pw":62,"ph":4024,"width":62,"shift":10,"szh":"朽木裂纹间簇生翠绿苔藓，一颗水珠悬在虚化的绿意前","sen":"Bright green moss clusters sprout from cracked weathered wood, a single droplet against blurred green"}]},{"no":7,"place":"川西","regionName":"川西","regionEn":"West Sichuan","regionId":"chuanxi","places":["川西"],"part":{"i":2,"n":2},"zh":"川西高原的草甸与雪山，牦牛散落在坡上","en":"Highland meadows and snow peaks of western Sichuan, yaks scattered across the slopes.","items":[{"out":"005_川西 (5).jpg","orient":"landscape","ratio":1.503,"pw":100,"ph":4024,"width":100,"shift":0,"szh":"浓雾中的棕白花牛立于开满黄色野花的草甸","sen":"A brown-and-white cow stands in a foggy meadow dotted with yellow wildflowers."},{"out":"006_川西 (6).jpg","orient":"landscape","ratio":1.503,"pw":72,"ph":4024,"width":72,"shift":5,"szh":"黑牦牛立于带孔石墙前，远处是高原城镇与积云晴空","sen":"A black yak stands by a holed stone wall, distant plateau town under cloudy blue sky."},{"out":"007_川西 (7).jpg","orient":"landscape","ratio":1.5,"pw":86,"ph":2016,"width":86,"shift":0,"szh":"仰拍：五彩经幡从木杆向蓝天四散，云隙透出明亮日光","sen":"Low-angle view of colorful prayer flags streaming from a pole against a cloud-streaked blue sky."},{"out":"008_川西.jpg","orient":"landscape","ratio":1.3333,"pw":62,"ph":1080,"width":62,"shift":10,"szh":"长曝光下，溪水从苔藓岩壁滑落，秋叶点缀两侧。","sen":"Long exposure: a stream slips down mossy rocks, autumn leaves framing both sides."}]},{"no":8,"place":"稻城亚丁","regionName":"川西","regionEn":"West Sichuan","regionId":"chuanxi","places":["稻城亚丁"],"part":{"i":1,"n":2},"zh":"川西高原的草甸与雪山，牦牛散落在坡上","en":"Highland meadows and snow peaks of western Sichuan, yaks scattered across the slopes.","items":[{"out":"020_稻城亚丁 (1).jpg","orient":"landscape","ratio":1.4985,"pw":100,"ph":997,"width":100,"shift":0,"szh":"雪山崖壁下，金顶喇嘛庙半掩于松林，云雾缠绕峰顶","sen":"A golden-roofed monastery hidden among pines beneath snow peaks, clouds drifting over the summits."},{"out":"021_稻城亚丁 (2).jpg","orient":"landscape","ratio":1.5,"pw":72,"ph":2016,"width":72,"shift":5,"szh":"柔光透过绿叶，一只棕颊斑纹小鸟立于枯枝，背景虚化","sen":"A rufous-cheeked, barred bird perches on a bare branch, soft light filtering through blurred green foliage."},{"out":"022_稻城亚丁 (3).jpg","orient":"landscape","ratio":1.5,"pw":86,"ph":2016,"width":86,"shift":0,"szh":"红嘴山鸦立于木桩，身后是虚化的高原草甸与层叠青山","sen":"A red-billed chough perches on a wooden post against blurred green highland meadows."}]},{"no":9,"place":"稻城亚丁","regionName":"川西","regionEn":"West Sichuan","regionId":"chuanxi","places":["稻城亚丁"],"part":{"i":2,"n":2},"zh":"川西高原的草甸与雪山，牦牛散落在坡上","en":"Highland meadows and snow peaks of western Sichuan, yaks scattered across the slopes.","items":[{"out":"023_稻城亚丁 (4).jpg","orient":"landscape","ratio":1.5,"pw":100,"ph":1080,"width":100,"shift":0,"szh":"深色层岩与残雪交错，峰顶切过积云的蓝天。","sen":"Dark stratified rock and patchy snow cut against a cloud-streaked blue sky."},{"out":"024_稻城亚丁.jpg","orient":"portrait","ratio":0.6667,"pw":100,"ph":3024,"width":100,"shift":0,"szh":"阴天柔光，慢门瀑布沿深色岩壁垂落，针叶横枝框住水幕","sen":"Overcast soft light: a long-exposure waterfall slips down dark rock as green conifer branches frame the stream."}]},{"no":10,"place":"九寨沟","regionName":"川西","regionEn":"West Sichuan","regionId":"chuanxi","places":["九寨沟"],"part":{"i":1,"n":2},"zh":"川西高原的草甸与雪山，牦牛散落在坡上","en":"Highland meadows and snow peaks of western Sichuan, yaks scattered across the slopes.","items":[{"out":"033_九寨沟 (1).jpg","orient":"landscape","ratio":1.5025,"pw":100,"ph":1600,"width":100,"shift":0,"szh":"冬季钙华瀑布，冰凌垂挂岩壁，丝绢水流跌落深蓝水潭","sen":"Winter travertine cascades, icicles on rocks, silky water falling into a deep blue pool"},{"out":"034_九寨沟 (2).jpg","orient":"landscape","ratio":1.5026,"pw":72,"ph":2726,"width":72,"shift":5,"szh":"雪后初晴，枯枝与沉木静卧在碧蓝的湖水中","sen":"After snowfall, bare branches and sunken logs rest in the turquoise lake."},{"out":"035_九寨沟 (3).jpg","orient":"landscape","ratio":1.5,"pw":86,"ph":2016,"width":86,"shift":0,"szh":"逆光下红枫与嫩绿枝叶交叠，林间散景斑驳","sen":"Backlit red maple leaves against soft green foliage, dappled forest bokeh"},{"out":"036_九寨沟 (4).jpg","orient":"portrait","ratio":0.6667,"pw":70,"ph":3024,"width":70,"shift":10,"szh":"石板窄巷，白墙黑迹，六角窗前黄衣人独行","sen":"A lone walker in yellow passes hexagonal windows along a stone-paved alley of weathered white walls."}]},{"no":11,"place":"九寨沟","regionName":"川西","regionEn":"West Sichuan","regionId":"chuanxi","places":["九寨沟"],"part":{"i":2,"n":2},"zh":"川西高原的草甸与雪山，牦牛散落在坡上","en":"Highland meadows and snow peaks of western Sichuan, yaks scattered across the slopes.","items":[{"out":"037_九寨沟 (5).jpg","orient":"portrait","ratio":0.6667,"pw":64,"ph":3024,"width":64,"shift":0,"szh":"阴天，江南水乡的白墙黛瓦与黄绿大树倒映在平静河面","sen":"White-walled Jiangnan water town mirrored in still water beneath a yellow-green tree under overcast sky."},{"out":"038_九寨沟 (6).jpg","orient":"landscape","ratio":1.5,"pw":72,"ph":2016,"width":72,"shift":5,"szh":"夜色下的金鸡湖畔，东方之门通体亮灯，游艇静泊于栈桥前","sen":"Night falls over Jinji Lake as the arched Gate of the Orient glows above moored yachts."},{"out":"039_九寨沟 (7).jpg","orient":"landscape","ratio":1.5,"pw":86,"ph":2016,"width":86,"shift":0,"szh":"斜阳下，橘白猫伏在编织席上闭目打盹","sen":"An orange-and-white cat dozes on a woven mat in soft sunlight"},{"out":"040_九寨沟.jpg","orient":"landscape","ratio":1.503,"pw":62,"ph":4024,"width":62,"shift":10,"szh":"木栏杆外，蓝绿渐变的湖水清澈见底，红色救生圈倚在岸边","sen":"Beyond the wooden railing, clear turquoise lake water reveals the bottom, a red lifebuoy resting nearby"}]},{"no":12,"place":"四姑娘山","regionName":"川西","regionEn":"West Sichuan","regionId":"chuanxi","places":["四姑娘山"],"part":null,"zh":"川西高原的草甸与雪山，牦牛散落在坡上","en":"Highland meadows and snow peaks of western Sichuan, yaks scattered across the slopes.","items":[{"out":"056_四姑娘山 (1).jpg","orient":"landscape","ratio":1.503,"pw":100,"ph":4024,"width":100,"shift":0,"szh":"晴空卷云下，积雪覆盖的峰脊与深色针叶林形成明暗对峙","sen":"Under a cirrus sky, snow-veined ridges rise above dark conifer slopes."},{"out":"057_四姑娘山 (2).jpg","orient":"landscape","ratio":1.503,"pw":72,"ph":4024,"width":72,"shift":5,"szh":"徒步者散落在棕色高山草坡上，远处雪峰夹峙谷地","sen":"Hikers scattered across a brown alpine slope, snow peaks framing the valley ahead."},{"out":"058_四姑娘山.jpg","orient":"landscape","ratio":1.503,"pw":86,"ph":4024,"width":86,"shift":0,"szh":"冷杉剪影间，双峰积雪在晴空下显出岩脊纹理","sen":"Snow-streaked twin peaks rise between dark firs under a clear blue sky."}]},{"no":13,"place":"七彩丹霞、扎尕那、中卫","regionName":"甘肃","regionEn":"Gansu","regionId":"gansu","places":["七彩丹霞","扎尕那","中卫"],"part":null,"zh":"张掖七彩丹霞与沙漠，岩层在雨后颜色最饱和","en":"Zhangye Danxia and the desert beyond, strata at their most saturated after rain.","items":[{"out":"045_七彩丹霞.jpg","orient":"portrait","ratio":0.6772,"pw":64,"ph":4536,"width":64,"shift":0,"szh":"澄澈蓝天里，彩色格纹热气球喷着火焰缓缓升空","sen":"A colorful checkered hot air balloon fires its burner against a clear blue sky"},{"out":"076_扎尕那.jpg","orient":"landscape","ratio":1.2501,"pw":72,"ph":4023,"width":72,"shift":5,"szh":"云雾压着锯齿峰顶，梯田间的白墙金顶寺院与藏寨","sen":"Cloud-wrapped jagged peaks above terraced fields, a white-walled monastery and Tibetan village"},{"out":"077_中卫 (1).jpg","orient":"landscape","ratio":1.5034,"pw":86,"ph":1599,"width":86,"shift":0,"szh":"低角度仰拍的沙丘波纹直抵脊线，人影与新月同框","sen":"Low-angle view of rippled dunes, a tiny figure and crescent moon above the ridge"},{"out":"078_中卫 (2).jpg","orient":"landscape","ratio":1.5015,"pw":62,"ph":2728,"width":62,"shift":10,"szh":"银河横贯夜空，沙丘脊上脚印串串，远处地平线浮着橙红灯光。","sen":"Footprints trail along a sand dune ridge beneath the Milky Way, distant city lights glowing on the horizon."}]},{"no":14,"place":"大连","regionName":"辽宁","regionEn":"Liaoning","regionId":"liaoning","places":["大连"],"part":{"i":1,"n":3},"zh":"大连的海岸与街道，黄昏把楼群染成暖色","en":"The coast and streets of Dalian, dusk warming the facades.","items":[{"out":"009_大连 (1).jpg","orient":"landscape","ratio":1.3333,"pw":100,"ph":3072,"width":100,"shift":0,"szh":"夕阳穿过玻璃幕墙，电车线网交织的街头车流","sen":"Sunset light between glass towers, tram wires crisscrossing over traffic-filled streets."},{"out":"010_大连 (2).jpg","orient":"landscape","ratio":1.5,"pw":72,"ph":2016,"width":72,"shift":5,"szh":"夜色中密集的高层住宅群，街灯把弯曲道路染成橙黄。","sen":"High-rise apartments at night, a curving avenue glowing orange under streetlights."},{"out":"011_大连 (3).jpg","orient":"landscape","ratio":1.5,"pw":86,"ph":2016,"width":86,"shift":0,"szh":"晴日海畔，金色芦苇丛与岩顶覆枯草的礁石","sen":"Golden reeds and a grass-topped rock outcrop by the sea under a clear sky"},{"out":"012_大连 (4).jpg","orient":"landscape","ratio":1.5,"pw":62,"ph":2016,"width":62,"shift":10,"szh":"晴空下四只海鸥展翅掠过，白羽被强烈阳光照得发亮","sen":"Four seagulls glide across a clear blue sky, wings bright in strong sunlight"}]},{"no":15,"place":"大连","regionName":"辽宁","regionEn":"Liaoning","regionId":"liaoning","places":["大连"],"part":{"i":2,"n":3},"zh":"大连的海岸与街道，黄昏把楼群染成暖色","en":"The coast and streets of Dalian, dusk warming the facades.","items":[{"out":"013_大连 (5).jpg","orient":"landscape","ratio":1.5,"pw":100,"ph":2016,"width":100,"shift":0,"szh":"褐色层岩柱矗立碎冰湖面，远处蓝水带横贯天际","sen":"A layered brown rock pillar stands amid cracked lake ice, open blue water beyond."},{"out":"014_大连 (6).jpg","orient":"landscape","ratio":1.5,"pw":72,"ph":2016,"width":72,"shift":5,"szh":"橙蓝渐变的天幕下，海鸥剪影掠过城市天际线与水面","sen":"Seagulls in silhouette glide over the city skyline against a dusk gradient sky"},{"out":"015_大连 (7).jpg","orient":"landscape","ratio":1.4984,"pw":86,"ph":1866,"width":86,"shift":0,"szh":"暮色中开阔广场行人稀疏，远处双塔高楼映着粉橙天空","sen":"At dusk, sparse pedestrians cross a wide plaza before twin towers under a pink-orange sky."},{"out":"016_大连 (8).jpg","orient":"portrait","ratio":0.669,"pw":70,"ph":3637,"width":70,"shift":10,"szh":"逆光下的玻璃幕墙高楼与公交车，大连街头黄昏","sen":"Backlit glass towers and a bus on a Dalian street at dusk"}]},{"no":16,"place":"大连","regionName":"辽宁","regionEn":"Liaoning","regionId":"liaoning","places":["大连"],"part":{"i":3,"n":3},"zh":"大连的海岸与街道，黄昏把楼群染成暖色","en":"The coast and streets of Dalian, dusk warming the facades.","items":[{"out":"017_大连 (9).jpg","orient":"landscape","ratio":1.4949,"pw":100,"ph":2433,"width":100,"shift":0,"szh":"枯树林前的干土地上，暖阳斜照，一头长角公鹿正对镜头站立。","sen":"On dry ground before bare winter trees, a antlered stag stands facing the camera in warm sunlight."},{"out":"018_大连.jpg","orient":"landscape","ratio":1.4949,"pw":72,"ph":2433,"width":72,"shift":5,"szh":"舷窗外，客机机翼与橙红翼尖小翼横在无云的蓝天上","sen":"Through the cabin window, the wing and its orange winglet cut across a cloudless blue sky."},{"out":"019_大连.jpg","orient":"landscape","ratio":1.3333,"pw":86,"ph":3072,"width":86,"shift":0,"szh":"夕阳把海湾染成橙红，长桥与楼群化作剪影，海鸥掠过天际","sen":"Sunset turns the bay orange; a long bridge and skyline silhouette as gulls cross the sky."}]},{"no":17,"place":"连云港","regionName":"江苏","regionEn":"Jiangsu","regionId":"jiangsu","places":["连云港"],"part":{"i":1,"n":2},"zh":"云台山的雾凇与海边的礁石，冬日的连云港","en":"Rime on Mount Huaguo and rocky shores by the sea, Lianyungang in winter.","items":[{"out":"030_花果山 (1).jpg","orient":"portrait","ratio":0.6667,"pw":64,"ph":3024,"width":64,"shift":0,"szh":"晴空下覆雪冷杉高耸，两名游客立于树前仰望。","sen":"Under a clear blue sky, two visitors stand before a towering snow-covered spruce."},{"out":"031_花果山 (2).jpg","orient":"portrait","ratio":0.6667,"pw":78,"ph":3024,"width":78,"shift":5,"szh":"晴空下松枝缀满雾凇，侧逆光里冰晶泛白，冬日的冷蓝与霜白相接","sen":"Rime-coated pine branches glow white against a clear blue winter sky"},{"out":"032_花果山.jpg","orient":"portrait","ratio":0.6667,"pw":58,"ph":3024,"width":58,"shift":0,"szh":"晨光斜照，雾凇包裹的松枝在蓝天下泛出淡粉光泽","sen":"Morning light tints frost-covered pine needles pink against a clear blue sky"}]},{"no":18,"place":"连云港","regionName":"江苏","regionEn":"Jiangsu","regionId":"jiangsu","places":["连云港"],"part":{"i":2,"n":2},"zh":"云台山的雾凇与海边的礁石，冬日的连云港","en":"Rime on Mount Huaguo and rocky shores by the sea, Lianyungang in winter.","items":[{"out":"043_连岛.jpg","orient":"landscape","ratio":1.503,"pw":100,"ph":4024,"width":100,"shift":0,"szh":"退潮后的沙滩上浅水映着天光，几台黄色作业车停在水中央","sen":"At low tide, yellow work vehicles rest in the shallow water of a wide flat beach."},{"out":"044_连云港.jpg","orient":"landscape","ratio":1.503,"pw":100,"ph":4024,"width":100,"shift":0,"szh":"日出时橙红霞光沿海平线铺开，礁石沉入深蓝静水","sen":"At sunrise, orange light spreads along the horizon; dark rocks sink into still blue water."}]},{"no":19,"place":"青岛","regionName":"山东","regionEn":"Shandong","regionId":"shandong","places":["青岛"],"part":{"i":1,"n":2},"zh":"青岛的红瓦与海岸线，海雾从远处慢慢推上来","en":"Qingdao’s red roofs and coastline, sea fog rolling in from the distance.","items":[{"out":"046_青岛 (1).jpg","orient":"landscape","ratio":1.5,"pw":100,"ph":2016,"width":100,"shift":0,"szh":"暮色海面上，橙红落日悬于薄雾中，一艘客轮缓缓驶过。","sen":"A ferry glides across a hazy sea as the orange sun sets."},{"out":"047_青岛 (2).jpg","orient":"landscape","ratio":1.503,"pw":72,"ph":4024,"width":72,"shift":5,"szh":"孔雀蓝颈羽特写，身侧是手写黑板与木质货架","sen":"Close-up of a peacock's blue neck beside a handwritten chalkboard and wooden shelves"},{"out":"048_青岛 (3).jpg","orient":"landscape","ratio":1.503,"pw":86,"ph":4024,"width":86,"shift":0,"szh":"亭桥横跨湖面，绿树与远山倒映水中，晴空浮着薄云","sen":"A pavilion bridge spans the lake; trees and hills mirror in the calm water under a clear sky"},{"out":"049_青岛 (4).jpg","orient":"landscape","ratio":1.503,"pw":62,"ph":4024,"width":62,"shift":10,"szh":"阴天灰白天空下，文庙深色木构飞檐与金字匾额，檐下红灯一角。","sen":"Overcast white sky above dark wooden eaves and a gilded Confucian temple plaque, red lantern below."}]},{"no":20,"place":"青岛","regionName":"山东","regionEn":"Shandong","regionId":"shandong","places":["青岛"],"part":{"i":2,"n":2},"zh":"青岛的红瓦与海岸线，海雾从远处慢慢推上来","en":"Qingdao’s red roofs and coastline, sea fog rolling in from the distance.","items":[{"out":"050_青岛 (5).jpg","orient":"landscape","ratio":1.503,"pw":100,"ph":4024,"width":100,"shift":0,"szh":"阴天散光下，木构戏台蓝绿彩绘斗拱，圆窗棂格映深木门扇","sen":"Under overcast light, a wooden opera stage with blue-green painted brackets and a round lattice window"},{"out":"051_青岛 (6).jpg","orient":"portrait","ratio":0.6653,"pw":78,"ph":6048,"width":78,"shift":5,"szh":"五四广场夜色中，红色雕塑与霓虹高楼隔水相映，游人驻足拍照","sen":"At night in May Fourth Square, a red sculpture faces neon towers across the water as visitors photograph."},{"out":"052_青岛.jpg","orient":"landscape","ratio":1.3333,"pw":86,"ph":3072,"width":86,"shift":0,"szh":"蓝调时刻，红白灯塔立于防波堤尽头，天际晕开一抹淡紫。","sen":"Blue hour: a red-and-white lighthouse at the breakwater's end, a faint violet band on the horizon."}]},{"no":21,"place":"哈尔滨","regionName":"黑龙江","regionEn":"Heilongjiang","regionId":"heilongjiang","places":["哈尔滨"],"part":null,"zh":"圣索菲亚教堂的穹顶，金饰在昏暗里仍然发亮","en":"The dome of Saint Sophia in Harbin, gilding still catching light in the dim interior.","items":[{"out":"025_哈尔滨 (2).jpg","orient":"landscape","ratio":1.3334,"pw":100,"ph":3014,"width":100,"shift":0,"szh":"粉墙白拱的礼拜堂内，彩窗与金饰天使映着暖光","sen":"Pink walls and white arches frame stained glass and gilded angels in a chapel."},{"out":"026_哈尔滨.jpg","orient":"landscape","ratio":1.503,"pw":72,"ph":4024,"width":72,"shift":5,"szh":"蓝天白云下，红砖教堂的绿色洋葱顶与金色十字架高耸","sen":"Green onion domes and gold crosses rise above the red-brick church under a blue sky"},{"out":"027_哈尔滨圣索菲亚教堂.jpg","orient":"landscape","ratio":1.5016,"pw":86,"ph":2560,"width":86,"shift":0,"szh":"蓝色穹顶下，金色吊灯悬垂，漆面剥落露出斑驳灰泥","sen":"A gilded chandelier hangs from a peeling blue vaulted ceiling, paint flaking to bare plaster."}]},{"no":22,"place":"青海","regionName":"青海","regionEn":"Qinghai","regionId":"qinghai","places":["青海"],"part":null,"zh":"青海湖的青与蓝，公路沿着湖岸一直延伸","en":"The greens and blues of Qinghai Lake, the road running along the shore.","items":[{"out":"053_青海.jpg","orient":"landscape","ratio":1.3333,"pw":100,"ph":1080,"width":100,"shift":0,"szh":"苍茫戈壁滩上，风机静立，远处荒山隐入灰白薄雾","sen":"Wind turbines stand on a vast desert plain, distant ridges fading into pale haze."},{"out":"054_青海湖 (1).jpg","orient":"landscape","ratio":1.3333,"pw":72,"ph":1080,"width":72,"shift":5,"szh":"晴空薄云下，金顶藏式白塔，白色基座嵌蓝色狮面浮雕","sen":"Golden-spired white stupa with blue lion reliefs on its base under a cloudy sky."},{"out":"055_青海湖 (2).jpg","orient":"landscape","ratio":1.3333,"pw":86,"ph":3072,"width":86,"shift":0,"szh":"成群海鸥栖在滩涂上，白色游船泊于碧蓝水面，云层低垂","sen":"Gulls line the marshy shore as white cruise boats moor in turquoise water beneath a cloud-streaked sky."}]},{"no":23,"place":"武汉","regionName":"湖北","regionEn":"Hubei","regionId":"hubei","places":["武汉"],"part":null,"zh":"武汉的城市天际线，在黄昏里退成剪影","en":"The Wuhan skyline receding into silhouette at dusk.","items":[{"out":"059_武汉.jpg","orient":"landscape","ratio":1.503,"pw":100,"ph":4024,"width":100,"shift":0,"szh":"红色韶山9型机车牵引绿皮车厢，驶过接触网下的碎石轨道","sen":"A red Shaoshan 9 locomotive hauls green carriages along gravel tracks beneath catenary wires."}]},{"no":24,"place":"杭州","regionName":"浙江","regionEn":"Zhejiang","regionId":"zhejiang","places":["杭州"],"part":null,"zh":"西湖的荷叶与枫枝，初夏光线穿过树影","en":"Lotus leaves and maple branches in Hangzhou, early-summer light through the trees.","items":[{"out":"028_杭州 (1).jpg","orient":"landscape","ratio":1.5021,"pw":100,"ph":958,"width":100,"shift":0,"szh":"逆光下青枫枝叶低垂，背景虚化成石径与光斑","sen":"Backlit green maple leaves hang over a blurred stone path."},{"out":"029_杭州 (2).jpg","orient":"landscape","ratio":1.5021,"pw":100,"ph":958,"width":100,"shift":0,"szh":"正午阳光下，两朵粉荷挺立于密接的绿叶间，旁有花苞待放","sen":"Under the midday sun, two pink lotus blooms rise above dense green leaves beside a bud"}]}];
 
 const $ = (s, r = document) => r.querySelector(s);
-const grid = $('#grid'), filtersBox = $('#filters');
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* 首图：选分辨率最高的横构图 */
-(function initHero() {
-  const cands = PHOTOS.filter((p) => p.orient === 'landscape');
-  const pick = (cands.length ? cands : PHOTOS).reduce((a, b) => (b.w * b.h > a.w * a.h ? b : a), PHOTOS[0]);
-  const img = $('#heroImg');
-  img.src = pick.full; img.alt = pick.title || '首图';
-})();
+/* 扁平列表：灯箱跨版连续翻页 */
+const ALL = [];
+let total = 0;
+for (const pl of PLATES) for (const p of pl.items) { p.plate = pl; ALL.push(p); total++; }
 
-let currentFilter = 'all';
+/* ── 封面统计 ── */
+const regions = [...new Map(PLATES.map((p) => [p.regionId, p.regionName])).values()];
+$('#heroMeta').innerHTML = [
+  ['地区', regions.length],
+  ['版面', PLATES.length],
+  ['作品', total],
+].map(([k, v]) => `<span>${k}<b>${v}</b></span>`).join('');
+$('#year').textContent = new Date().getFullYear();
+$('#footCount').textContent = total + ' Photographs · ' + PLATES.length + ' Plates';
 
-function caption(p) {
-  const bits = [];
-  if (p.title) bits.push(p.title);
-  if (p.place) bits.push(p.place);
-  if (!bits.length && p.source) bits.push(p.source);
-  return bits.join(' · ');
+/* ── 导航：按地区，点击跳到该地区第一个版面 ── */
+const nav = $('#nav');
+const navRegions = [];
+for (const pl of PLATES) {
+  if (!navRegions.some((r) => r.id === pl.regionId)) navRegions.push({ id: pl.regionId, name: pl.regionName, firstPlate: pl.no });
 }
+navRegions.forEach((r) => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.textContent = r.name; b.dataset.plate = r.firstPlate;
+  b.addEventListener('click', () => {
+    document.getElementById('p' + r.firstPlate).scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+  });
+  nav.appendChild(b);
+});
 
-function render() {
-  const list = currentFilter === 'all' ? PHOTOS : PHOTOS.filter((p) => p.orient === currentFilter);
-  grid.innerHTML = '';
-  if (!list.length) { grid.innerHTML = '<p class="empty">这个构图下还没有照片。</p>'; return; }
+/* ── 渲染版面 ── */
+const shots = [];
+let photoNo = 0;          // 全局照片序号，用于每张介绍左侧的编号
+for (const pl of PLATES) {
+  const sec = document.createElement('section');
+  sec.className = 'plate';
+  sec.id = 'p' + pl.no;
+  sec.dataset.region = pl.regionId;
 
-  list.forEach((p, i) => {
+  const name = pl.part ? (pl.place + ' · ' + pl.part.i + '/' + pl.part.n) : pl.place;
+  const head = document.createElement('div');
+  head.className = 'plate-head';
+  head.innerHTML =
+    '<div class="plate-no">' + String(pl.no).padStart(2, '0') + ' / ' + String(PLATES.length).padStart(2, '0') + '</div>' +
+    '<h2 class="plate-title">' + name + '<span class="en">' + (pl.regionEn || '') + (pl.places.length > 1 ? ' · ' + pl.places.join(' / ') : '') + '</span></h2>' +
+    '<p class="plate-desc">' + pl.zh + '<span class="en">' + pl.en + '</span></p>' +
+    '<div class="plate-meta">' + pl.items.length + ' Photographs · ' + pl.regionName + '</div>';
+
+  const body = document.createElement('div');
+  body.className = 'plate-body';
+
+  pl.items.forEach((p, i) => {
+    const shot = document.createElement('div');
+    shot.className = 'shot';
+    shot.style.setProperty('--w', p.width + '%');
+    shot.style.setProperty('--shift', (p.shift || 0) + '%');
+    shot.style.setProperty('--delay', ((i % 3) * 90) + 'ms');
+
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'card';
-    btn.dataset.orient = p.orient;
-    btn.style.setProperty('--st', (p.stagger || 0) + 'px');
-    // 揭示错开：同一屏内相邻几块相差 ~60ms，避免整块一起跳
-    btn.style.setProperty('--d', ((i % 5) * 60) + 'ms');
-    btn.setAttribute('aria-label', '查看：' + (p.title || p.name));
-
+    btn.className = 'shot-btn';
+    btn.setAttribute('aria-label', '查看：' + (p.szh || pl.place));    const inner = document.createElement('div');
+    inner.className = 'shot-inner';
     const im = document.createElement('img');
-    // 网格用 1600 档（grid/）：大屏格子约 400~500 CSS px，2x 屏需要 ~1000 物理像素；
-    // 之前用 800 档在这个尺寸下会发虚，现在有充足余量。
-    im.src = p.grid;
-    im.width = p.w; im.height = p.h;  // 内嵌真实像素，避免加载时跳动
+    im.src = 'grid/' + p.out;
+    im.width = p.pw; im.height = p.ph;
     im.loading = 'lazy'; im.decoding = 'async';
-    im.alt = p.title || '摄影作品';
-    im.className = 'is-loading';
-    im.addEventListener('load', () => im.classList.remove('is-loading'), { once: true });
+    im.alt = p.szh || name;
+    inner.appendChild(im);
+    btn.appendChild(inner);
+    shot.appendChild(btn);
 
-    const cap = document.createElement('span');
-    cap.className = 'cap';
-    cap.textContent = caption(p);
-
-    btn.append(im, cap);
-    btn.addEventListener('click', () => openLb(p));
-    grid.appendChild(btn);
-  });
-  observeCards();
-}
-
-/* 滚动揭示：淡入 + 去模糊（错位量已由 --st 承担，这里不再平移，避免叠加过多位移） */
-let io = null;
-function observeCards() {
-  if (io) io.disconnect();
-  if (REDUCED) { document.querySelectorAll('.card').forEach((c) => c.classList.add('is-in')); return; }
-  io = new IntersectionObserver((entries) => {
-    for (const e of entries) {
-      if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+    // 每张图的简短介绍（放在图片下方，与图片左对齐）
+    if (p.szh || p.sen) {
+      const cap = document.createElement('p');
+      cap.className = 'shot-cap';
+      const idx = document.createElement('span');
+      idx.className = 'shot-no';
+      idx.textContent = String(++photoNo).padStart(2, '0');
+      const body = document.createElement('span');
+      body.className = 'shot-cap-body';
+      const zh = document.createElement('span');
+      zh.className = 'shot-cap-zh';
+      zh.textContent = p.szh || '';
+      body.appendChild(zh);
+      if (p.sen) {
+        const en = document.createElement('span');
+        en.className = 'shot-cap-en en';
+        en.textContent = p.sen;
+        body.appendChild(en);
+      }
+      cap.append(idx, body);
+      shot.appendChild(cap);
     }
-  }, { rootMargin: '0px 0px -5% 0px', threshold: 0.03 });
-  document.querySelectorAll('.card').forEach((c) => io.observe(c));
+    body.appendChild(shot);
+    shots.push(shot);
+
+    btn.addEventListener('click', () => openLb(p, shot));
+  });
+
+  sec.append(head, body);
+  document.getElementById('plates').appendChild(sec);
 }
 
-filtersBox.addEventListener('click', (e) => {
-  const btn = e.target.closest('.chip');
-  if (!btn) return;
-  currentFilter = btn.dataset.filter;
-  filtersBox.querySelectorAll('.chip').forEach((c) => c.classList.toggle('is-on', c === btn));
-  render();
-});
+/* ── 揭示动画 ── */
+if (REDUCED) {
+  shots.forEach((s) => s.classList.add('is-in'));
+} else {
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
+  shots.forEach((s) => io.observe(s));
+}
 
-/* ── 精选区渲染 ──
-   每张 = 模糊衬底 + 大图 + 序号说明；三者由同一个 .is-in 驱动，
-   配合 CSS 里不同的 transition-delay，形成"先展开衬底、再落定大图、最后浮现说明"的层次。 */
-const featList = document.getElementById('featuredList');
-const featIo = REDUCED ? null : new IntersectionObserver((entries) => {
-  for (const e of entries) {
-    if (e.isIntersecting) { e.target.classList.add('is-in'); featIo.unobserve(e.target); }
+/* ── 滚动视差 + 导航高亮 + 顶栏/回到顶部 ── */
+const bar = $('#topbar'), toTop = $('#totop'), navBtns = [...nav.children];
+const plateEls = PLATES.map((pl) => document.getElementById('p' + pl.no));
+let ticking = false;
+
+function onFrame() {
+  const vh = innerHeight;
+  bar.classList.toggle('is-scrolled', scrollY > 40);
+  toTop.classList.toggle('is-on', scrollY > vh * 1.2);
+
+  if (!REDUCED) {
+    for (const s of shots) {
+      const r = s.getBoundingClientRect();
+      if (r.bottom < -100 || r.top > vh + 100) continue;
+      const center = r.top + r.height / 2 - vh / 2;
+      const py = Math.max(-16, Math.min(16, (-center / vh) * 26));
+      const inner = s.querySelector('.shot-inner');
+      if (inner) inner.style.setProperty('--py', py.toFixed(2) + 'px');
+    }
   }
-}, { rootMargin: '0px 0px -12% 0px', threshold: 0.14 });
 
-FEATURED.forEach((p) => {
-  const art = document.createElement('article');
-  art.className = 'feat';
+  // 当前版面 → 高亮它所属的地区
+  let activeRegion = navRegions[0]?.id;
+  for (let i = 0; i < plateEls.length; i++) {
+    const el = plateEls[i];
+    if (el && el.getBoundingClientRect().top <= vh * 0.38) activeRegion = PLATES[i].regionId;
+  }
+  navBtns.forEach((b) => {
+    const on = b.dataset.region ? b.dataset.region === activeRegion
+      : navRegions.find((r) => r.name === b.textContent)?.id === activeRegion;
+    b.classList.toggle('is-on', !!on);
+  });
+  const onBtn = navBtns.find((b) => b.classList.contains('is-on'));
+  if (onBtn && nav.scrollWidth > nav.clientWidth) {
+    const want = onBtn.offsetLeft - nav.clientWidth / 2 + onBtn.offsetWidth / 2;
+    if (Math.abs(nav.scrollLeft - want) > 40) nav.scrollTo({ left: want, behavior: REDUCED ? 'auto' : 'smooth' });
+  }
+  ticking = false;
+}
+function requestFrame() { if (!ticking) { ticking = true; requestAnimationFrame(onFrame); } }
+addEventListener('scroll', requestFrame, { passive: true });
+addEventListener('resize', requestFrame);
+onFrame();
+toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' }));
 
-  const back = document.createElement('div');
-  back.className = 'feat-backdrop';
-  back.setAttribute('aria-hidden', 'true');
-  const bimg = document.createElement('img');
-  bimg.src = p.backdrop; bimg.alt = ''; bimg.loading = 'lazy'; bimg.decoding = 'async';
-  back.appendChild(bimg);
+/* ── 灯箱 ── */
+const lb = $('#lb'), lbImg = $('#lbImg'), lbCap = $('#lbCap');
+let cur = -1, returnFocus = null;
 
-  const fig = document.createElement('figure');
-  fig.className = 'feat-figure';
-
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'feat-btn';
-  btn.setAttribute('aria-label', '查看精选：' + (p.title || p.name));
-  const im = document.createElement('img');
-  im.src = p.full; im.width = p.w; im.height = p.h;
-  im.loading = 'lazy'; im.decoding = 'async';
-  im.alt = p.title || '精选作品';
-  btn.appendChild(im);
-
-  const meta = document.createElement('figcaption');
-  meta.className = 'feat-meta';
-  const no = document.createElement('span'); no.className = 'feat-no'; no.textContent = p.no;
-  const ti = document.createElement('span'); ti.className = 'feat-title'; ti.textContent = p.title || p.name;
-  meta.append(no, ti);
-  // 有地点就显示地点，否则回落到器材来源；两个都没有就不加这一栏
-  const tail = p.place || p.source;
-  if (tail) { const sr = document.createElement('span'); sr.className = 'feat-src'; sr.textContent = tail; meta.appendChild(sr); }
-
-  btn.addEventListener('click', () => openLb(p));
-  fig.append(btn, meta);
-  art.append(back, fig);
-  featList.appendChild(art);
-
-  if (featIo) featIo.observe(art); else art.classList.add('is-in');
-});
-document.getElementById('featCount').textContent = FEATURED.length;
-
-/* 灯箱要能在精选与网格之间连续翻页，所以用"精选 + 全部"的合并列表 */
-const ALL = FEATURED.concat(PHOTOS);
-
-/* 统计 */
-$('#count').textContent = PHOTOS.length;
-const o = PHOTOS.reduce((a, p) => { a[p.orient] = (a[p.orient] || 0) + 1; return a; }, {});
-const gear = [...new Set(PHOTOS.map((p) => p.source).filter(Boolean))];
-$('#range').textContent = '2024–2026';
-$('#factCount').textContent = PHOTOS.length + ' 张';
-$('#factOrient').textContent = '横 ' + (o.landscape || 0) + ' · 竖 ' + (o.portrait || 0) + ' · 方 ' + (o.square || 0);
-$('#factGear').textContent = gear.join(' / ') || '—';
-$('#year').textContent = new Date().getFullYear();
-
-/* 顶栏 */
-const bar = $('#topbar');
-const onScroll = () => bar.classList.toggle('is-stuck', window.scrollY > window.innerHeight * 0.7);
-onScroll();
-addEventListener('scroll', onScroll, { passive: true });
-
-/* 灯箱 */
-const lb = $('#lb'), lbImg = $('#lbImg');
-let list = ALL, cur = -1;
-
-function openLb(p) {
-  // 精选区的图不在网格筛选集合里，但点开后要能继续左右翻 —— 命中精选就用全量列表
-  const inFeatured = FEATURED.indexOf(p) >= 0;
-  list = (inFeatured || currentFilter === 'all') ? ALL : PHOTOS.filter((x) => x.orient === currentFilter);
-  cur = list.indexOf(p);
+function openLb(p, shotEl) {
+  cur = ALL.indexOf(p);
+  returnFocus = shotEl || null;
   showLb();
   lb.classList.add('is-open');
   document.body.style.overflow = 'hidden';
   $('#lbClose').focus();
 }
 function showLb() {
-  const p = list[cur];
+  const p = ALL[cur];
   if (!p) return;
   lbImg.classList.remove('is-shown');
   const next = new Image();
-  next.src = p.full;
+  next.src = 'photos/' + p.out;
   next.onload = () => {
-    lbImg.src = p.full;
-    lbImg.alt = p.title || p.name;
+    lbImg.src = 'photos/' + p.out;
+    lbImg.alt = p.plate.place;
     requestAnimationFrame(() => lbImg.classList.add('is-shown'));
   };
-  $('#lbIdx').textContent = (cur + 1) + ' / ' + list.length;
-  $('#lbMeta').textContent = [p.title, p.place, p.source].filter(Boolean).join(' · ') || p.name;
-  for (const d of [1, -1]) { const n = list[cur + d]; if (n) { const i = new Image(); i.src = n.full; } }
+  $('#lbIdx').textContent = (cur + 1) + ' / ' + ALL.length + '   ·   ' + p.plate.regionName + ' · ' + p.plate.place;
+  // 说明用整版级别的那条
+  lbCap.innerHTML = p.plate.zh + (p.plate.en ? '<span class="en">' + p.plate.en + '</span>' : '');
+  for (const d of [1, -1, 2, -2]) { const n = ALL[cur + d]; if (n) { const i = new Image(); i.src = 'photos/' + n.out; } }
 }
 function closeLb() {
   lb.classList.remove('is-open');
   document.body.style.overflow = '';
-  const card = document.querySelectorAll('.card')[cur];
-  if (card) card.focus();
+  if (returnFocus) returnFocus.querySelector('.shot-btn')?.focus();
 }
 $('#lbClose').addEventListener('click', closeLb);
-$('#lbPrev').addEventListener('click', () => { cur = (cur - 1 + list.length) % list.length; showLb(); });
-$('#lbNext').addEventListener('click', () => { cur = (cur + 1) % list.length; showLb(); });
+$('#lbPrev').addEventListener('click', () => { cur = (cur - 1 + ALL.length) % ALL.length; showLb(); });
+$('#lbNext').addEventListener('click', () => { cur = (cur + 1) % ALL.length; showLb(); });
 lb.addEventListener('click', (e) => { if (e.target === lb || e.target.id === 'lbStage') closeLb(); });
 addEventListener('keydown', (e) => {
   if (!lb.classList.contains('is-open')) return;
   if (e.key === 'Escape') closeLb();
-  else if (e.key === 'ArrowLeft') { cur = (cur - 1 + list.length) % list.length; showLb(); }
-  else if (e.key === 'ArrowRight') { cur = (cur + 1) % list.length; showLb(); }
+  else if (e.key === 'ArrowLeft') { cur = (cur - 1 + ALL.length) % ALL.length; showLb(); }
+  else if (e.key === 'ArrowRight') { cur = (cur + 1) % ALL.length; showLb(); }
 });
 
-render();
+/* 触屏滑动：左右切换、下滑关闭 */
+let tx = 0, ty = 0;
+lb.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+lb.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) {
+    cur = (cur + (dx < 0 ? 1 : -1) + ALL.length) % ALL.length; showLb();
+  } else if (dy > 90 && Math.abs(dy) > Math.abs(dx)) closeLb();
+}, { passive: true });
 </script>
 </body>
 </html>
